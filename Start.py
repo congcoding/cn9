@@ -4,11 +4,10 @@ import random
 
 from PySpaceship import PySpaceShip
 from PyCar import racingcar
+from PyShooting import PyShooting
 
 import pygame
 from pygame.locals import *
-
-
 
 WINDOW_WIDTH = 480
 WINDOW_HEIGHT = 600
@@ -51,7 +50,8 @@ def main_screen():
                 racingcar.main_loop()
                 return 'main_screen'
             elif event.key == pygame.K_3:
-                print("keydown3")
+                PyShooting.initGame()
+                PyShooting.runGame()
                 return 'main_screen'
         if event.type == QUIT:
             return 'quit'

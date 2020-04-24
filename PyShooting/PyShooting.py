@@ -6,32 +6,32 @@ from time import sleep
 
 padWidth = 480
 padHeight = 600
-rockImage = ['rock01.png','rock02.png','rock03.png','rock04.png','rock05.png',\
-             'rock06.png','rock07.png','rock08.png','rock09.png','rock10.png',\
-             'rock11.png','rock12.png','rock13.png','rock14.png','rock15.png',\
-             'rock16.png','rock17.png','rock18.png','rock19.png','rock20.png',\
-             'rock21.png','rock22.png','rock23.png','rock24.png','rock25.png',\
-             'rock26.png','rock27.png','rock28.png','rock29.png','rock30.png']
-explosionSound = ['explosion01.wav','explosion02.wav','explosion03.wav','explosion04.wav']
+rockImage = ['./PyShooting/rock01.png','./PyShooting/rock02.png','./PyShooting/rock03.png','./PyShooting/rock04.png','./PyShooting/rock05.png',\
+             './PyShooting/rock06.png','./PyShooting/rock07.png','./PyShooting/rock08.png','./PyShooting/rock09.png','./PyShooting/rock10.png',\
+             './PyShooting/rock11.png','./PyShooting/rock12.png','./PyShooting/rock13.png','./PyShooting/rock14.png','./PyShooting/rock15.png',\
+             './PyShooting/rock16.png','./PyShooting/rock17.png','./PyShooting/rock18.png','./PyShooting/rock19.png','./PyShooting/rock20.png',\
+             './PyShooting/rock21.png','./PyShooting/rock22.png','./PyShooting/rock23.png','./PyShooting/rock24.png','./PyShooting/rock25.png',\
+             './PyShooting/rock26.png','./PyShooting/rock27.png','./PyShooting/rock28.png','./PyShooting/rock29.png','./PyShooting/rock30.png']
+explosionSound = ['./PyShooting/explosion01.wav','./PyShooting/explosion02.wav','./PyShooting/explosion03.wav','./PyShooting/explosion04.wav']
 
 
 def writeScore(count):
     global gamePad
-    font = pygame.font.Font('NanumGothic.ttf', 20)
+    font = pygame.font.Font('./PyShooting/NanumGothic.ttf', 20)
     text = font.render('파괴한 운석:' + str(count) + '/100', True, (255, 255, 255))
     gamePad.blit(text, (10, 0))
 
 
 def writePassed(count):
     global gamePad
-    font = pygame.font.Font('NanumGothic.ttf', 20)
+    font = pygame.font.Font('./PyShooting/NanumGothic.ttf', 20)
     text = font.render('놓친 운석:' + str(count) + '/3', True, (255, 0, 0))
     gamePad.blit(text, (360, 0))
 
 
 def writeMessage(text):
     global gamePad, gameOverSound
-    textfont = pygame.font.Font('NanumGothic.ttf', 80)
+    textfont = pygame.font.Font('./PyShooting/NanumGothic.ttf', 80)
     text = textfont.render(text, True, (255, 0, 0))
     textpos = text.get_rect()
     textpos.center = (padWidth/2, padHeight/2)
@@ -62,14 +62,14 @@ def initGame():
     pygame.init()
     gamePad = pygame.display.set_mode((padWidth, padHeight))
     pygame.display.set_caption('PyShooting')
-    background = pygame.image.load('background.png')
-    fighter = pygame.image.load('fighter.png')
-    missile = pygame.image.load('missile.png')
-    explosion = pygame.image.load('explosion.png')
-    pygame.mixer.music.load('music.wav')
+    background = pygame.image.load('./PyShooting/background.png')
+    fighter = pygame.image.load('./PyShooting/fighter.png')
+    missile = pygame.image.load('./PyShooting/missile.png')
+    explosion = pygame.image.load('./PyShooting/explosion.png')
+    pygame.mixer.music.load('./PyShooting/music.wav')
     pygame.mixer.music.play(-1)
-    missileSound = pygame.mixer.Sound('missile.wav')
-    gameOverSound = pygame.mixer.Sound('gameover.wav')
+    missileSound = pygame.mixer.Sound('./PyShooting/missile.wav')
+    gameOverSound = pygame.mixer.Sound('./PyShooting/gameover.wav')
     clock = pygame.time.Clock()
 
 
@@ -206,6 +206,3 @@ def runGame():
 
     pygame.quit()
 
-
-initGame()
-runGame()
