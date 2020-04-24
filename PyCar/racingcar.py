@@ -6,6 +6,7 @@ import os
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 
+
 WINDOW_WIDTH = 480
 WINDOW_HEIGHT = 600
 
@@ -116,12 +117,17 @@ def main_loop():
             if event.type == pygame.QUIT:
                 game_on = False
 
+            import Start
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_0:
+                Start.main_loop()
+                return 'main_screen'
+
             #게임 다시 시작
             if crash:
-                import Start
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_0:
-                    Start.main_loop()
-                    return 'main_screen'
+                #import Start
+                #if event.type == pygame.KEYDOWN and event.key == pygame.K_0:
+                #    Start.main_loop()
+                #    return 'main_screen'
                     
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     crash = False
