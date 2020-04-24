@@ -116,13 +116,7 @@ def main_loop():
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 game_on = False
-
-            import Start
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_0:
-                Start.main_loop()
-                return 'main_screen'
-
-            #게임 다시 시작
+                
             if crash:
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_0:
                     import Start
