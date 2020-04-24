@@ -2,13 +2,10 @@ import pygame
 import random
 from time import sleep
 
-
-
 WINDOW_WIDTH = 480
 WINDOW_HEIGHT = 600
 
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-score = 0
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -52,7 +49,7 @@ class Car:
         else:
             return False
 
-def draw_main_menu():
+def draw_main_menu(score):
     draw_x = (WINDOW_WIDTH / 2) - 200
     draw_y = WINDOW_HEIGHT / 2
     image_intro = pygame.image.load('./PyCar/PyCar.png')
@@ -66,7 +63,7 @@ def draw_main_menu():
     text_start = font_30.render("Press Space Key to Start!", True, RED)
     pygame.display.flip()
 
-def draw_score():
+def draw_score(score):
     font_30 = pygame.font.SysFont("FixedSys", 30, True, False)
     txt_score = font_30.render("Score: " + str(score), True, BLACK)
     screen.blit(txt_score, [15, 15])  
@@ -88,6 +85,7 @@ def main_loop():
 
     #컴퓨터 레이싱 카 생성
     cars = []
+    score = 0
     car_count = 3
     for i in range(car_count):
         x = random.randrange(0, WINDOW_WIDTH - 55)
@@ -107,7 +105,6 @@ def main_loop():
         lanes.append([lane_x, lane_y])
         lane_y += lane_height + lane_margin
 
-    
     crash = True
     game_on = True
     while game_on:
@@ -184,10 +181,10 @@ def main_loop():
                     pygame.mouse.set_visible(True)
                     break
 
-            draw_score()
+            draw_score(score)
             pygame.display.flip()
         else:
-            draw_main_menu()
+            draw_main_menu(score)
 
         clock.tick(60)
 
