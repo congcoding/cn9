@@ -71,7 +71,6 @@ def draw_score():
     txt_score = font_30.render("Score: " + str(score), True, BLACK)
     screen.blit(txt_score, [15, 15])  
 
-# if __name__ == '__main__':
 def main_loop():
     pygame.init()
 
