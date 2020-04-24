@@ -40,11 +40,11 @@ def writeMessage(text):
     textpos.center = (padWidth/2, padHeight/2)
     gamePad.blit(text, textpos)
     pygame.display.update()
-    pygame.mixer.music.stop()
-    gameOverSound.play()
-    sleep(2)
+    #pygame.mixer.music.stop()
+    #gameOverSound.play()
+    #sleep(2)
     pygame.mixer.music.play(-1)
-    #텍스트 출력 : 다시 하려면 1,메인으로 돌아가려면 0을 누르세
+    #텍스트 출력 : 다시 하려면 1,메인으로 돌아가려면 0을 누르세요
     for event in pygame.event.get():
             if event.type in [pygame.KEYDOWN]:
                 if event.key == pygame.K_0:
