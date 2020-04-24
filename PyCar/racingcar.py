@@ -2,8 +2,13 @@ import pygame
 import random
 from time import sleep
 
+
+
 WINDOW_WIDTH = 480
 WINDOW_HEIGHT = 600
+
+screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+score = 0
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
@@ -11,10 +16,10 @@ GRAY = (150, 150, 150)
 RED = (255, 0, 0)
 
 class Car:
-    image_car = ['RacingCar01.png', 'RacingCar02.png', 'RacingCar03.png', 'RacingCar04.png', 'RacingCar05.png', \
-                 'RacingCar06.png', 'RacingCar07.png', 'RacingCar08.png', 'RacingCar09.png', 'RacingCar10.png', \
-                 'RacingCar11.png', 'RacingCar12.png', 'RacingCar13.png', 'RacingCar14.png', 'RacingCar15.png', \
-                 'RacingCar16.png', 'RacingCar17.png', 'RacingCar18.png', 'RacingCar19.png', 'RacingCar20.png', ]
+    image_car = ['./PyCar/RacingCar01.png', './PyCar/RacingCar02.png', './PyCar/RacingCar03.png', './PyCar/RacingCar04.png', './PyCar/RacingCar05.png', \
+                 './PyCar/RacingCar06.png', './PyCar/RacingCar07.png', './PyCar/RacingCar08.png', './PyCar/RacingCar09.png', './PyCar/RacingCar10.png', \
+                 './PyCar/RacingCar11.png', './PyCar/RacingCar12.png', './PyCar/RacingCar13.png', './PyCar/RacingCar14.png', './PyCar/RacingCar15.png', \
+                 './PyCar/RacingCar16.png', './PyCar/RacingCar17.png', './PyCar/RacingCar18.png', './PyCar/RacingCar19.png', './PyCar/RacingCar20.png', ]
 
     def __init__(self, x=0, y=0, dx=0, dy=0):
         self.image = ""
@@ -50,7 +55,7 @@ class Car:
 def draw_main_menu():
     draw_x = (WINDOW_WIDTH / 2) - 200
     draw_y = WINDOW_HEIGHT / 2
-    image_intro = pygame.image.load('PyCar.png')
+    image_intro = pygame.image.load('./PyCar/PyCar.png')
     screen.blit(image_intro, [draw_x, draw_y - 280])
     font_40 = pygame.font.SysFont("FixedSys", 40, True, False)
     font_30 = pygame.font.SysFont("FixedSys", 30, True, False)
@@ -66,18 +71,17 @@ def draw_score():
     txt_score = font_30.render("Score: " + str(score), True, BLACK)
     screen.blit(txt_score, [15, 15])  
 
-if __name__ == '__main__':
-
+# if __name__ == '__main__':
+def main_loop():
     pygame.init()
 
-    screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
     pygame.display.set_caption("PyCar: Racing Car Game")
     clock = pygame.time.Clock()
 
     #게임 사운드
-    pygame.mixer.music.load('race.wav')
-    sound_crash = pygame.mixer.Sound('crash.wav')
-    sound_engine = pygame.mixer.Sound('engine.wav')
+    pygame.mixer.music.load('./PyCar/race.wav')
+    sound_crash = pygame.mixer.Sound('./PyCar/crash.wav')
+    sound_engine = pygame.mixer.Sound('./PyCar/engine.wav')
 
     #사용자 레이싱 카 생성
     player = Car(WINDOW_WIDTH / 2, (WINDOW_HEIGHT - 150), 0, 0)
@@ -104,7 +108,7 @@ if __name__ == '__main__':
         lanes.append([lane_x, lane_y])
         lane_y += lane_height + lane_margin
 
-    score = 0
+    
     crash = True
     game_on = True
     while game_on:

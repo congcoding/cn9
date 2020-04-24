@@ -18,22 +18,22 @@ BLUE = (20, 20, 250)
 pygame.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('PySpaceShip : 우주 암석 피하기 게임')
-pygame.display.set_icon(pygame.image.load('warp.png'))
+pygame.display.set_icon(pygame.image.load('./PySpaceShip/warp.png'))
 fps_clock = pygame.time.Clock()
 FPS = 60
 score = 0
 
-default_font = pygame.font.Font('NanumGothic.ttf', 28)
-background_img = pygame.image.load('background.jpg')
-explosion_sound = pygame.mixer.Sound('explosion.wav')
-warp_sound = pygame.mixer.Sound('warp.wav')
-pygame.mixer.music.load('Inner_Sanctum.mp3')
+default_font = pygame.font.Font('./PySpaceShip/NanumGothic.ttf', 28)
+background_img = pygame.image.load('./PySpaceShip/background.jpg')
+explosion_sound = pygame.mixer.Sound('./PySpaceShip/explosion.wav')
+warp_sound = pygame.mixer.Sound('./PySpaceShip/warp.wav')
+pygame.mixer.music.load('./PySpaceShip/Inner_Sanctum.mp3')
 
 # Sprite : pygame에서 게임에서 빈번하게 발생하는 객체들을 쉽게 관리할 수 있게 상속받을 수 있는 class
 class Spaceship(pygame.sprite.Sprite):  # 우주선 객체
     def __init__(self) :    # 초기화
         super(Spaceship, self).__init__()    # 상속받은 sprite에 Spaceship을 넘겨줌
-        self.image = pygame.image.load('spaceship.png')
+        self.image = pygame.image.load('./PySpaceShip/spaceship.png')
         self.rect = self.image.get_rect()
         self.centerx = self.rect.centerx
         self.centery = self.rect.centery
@@ -50,12 +50,12 @@ class Spaceship(pygame.sprite.Sprite):  # 우주선 객체
 class Rock(pygame.sprite.Sprite): #암석 객체
     def __init__(self, xpos, ypos, hspeed, vspeed):
         super(Rock, self).__init__()
-        rocks = ('rock01.png', 'rock02.png', 'rock03.png', 'rock04.png', 'rock05.png', \
-                 'rock06.png', 'rock07.png', 'rock08.png', 'rock09.png', 'rock10.png', \
-                 'rock11.png', 'rock12.png', 'rock13.png', 'rock14.png', 'rock15.png', \
-                 'rock16.png', 'rock17.png', 'rock18.png', 'rock19.png', 'rock20.png', \
-                 'rock21.png', 'rock22.png', 'rock23.png', 'rock24.png', 'rock25.png', \
-                 'rock26.png', 'rock27.png', 'rock28.png', 'rock29.png', 'rock30.png')
+        rocks = ('./PySpaceShip/rock01.png', './PySpaceShip/rock02.png', './PySpaceShip/rock03.png', './PySpaceShip/rock04.png', './PySpaceShip/rock05.png', \
+                 './PySpaceShip/rock06.png', './PySpaceShip/rock07.png', './PySpaceShip/rock08.png', './PySpaceShip/rock09.png', './PySpaceShip/rock10.png', \
+                 './PySpaceShip/rock11.png', './PySpaceShip/rock12.png', './PySpaceShip/rock13.png', './PySpaceShip/rock14.png', './PySpaceShip/rock15.png', \
+                 './PySpaceShip/rock16.png', './PySpaceShip/rock17.png', './PySpaceShip/rock18.png', './PySpaceShip/rock19.png', './PySpaceShip/rock20.png', \
+                 './PySpaceShip/rock21.png', './PySpaceShip/rock22.png', './PySpaceShip/rock23.png', './PySpaceShip/rock24.png', './PySpaceShip/rock25.png', \
+                 './PySpaceShip/rock26.png', './PySpaceShip/rock27.png', './PySpaceShip/rock28.png', './PySpaceShip/rock29.png', './PySpaceShip/rock30.png')
                  # 암석 이미지 파일 30개 입력
 
         self.image = pygame.image.load(random.choice(rocks)) # 30개 중에 랜덤으로 선택
@@ -103,7 +103,7 @@ def random_rock(speed): #암석이 랜덤하게 나와야 함
 class Warp(pygame.sprite.Sprite):   #Warp 아이템 : spaceship과 동
     def __init__(self, x, y):
         super(Warp, self).__init__()
-        self.image = pygame.image.load('warp.png')
+        self.image = pygame.image.load('./PySpaceShip/warp.png')
         self.rect = self.image.get_rect()
         self.rect.x = x - self.rect.centerx
         self.rect.y = y - self.rect.centery
@@ -222,7 +222,7 @@ def game_loop():    #실제 게임 엔진
                         screen.blit(transp_surf, transp_surf.get_rect())
                         pygame.mouse.set_visible(True) #일시정지 상태이면 마우스 모양이 우주선에서 마우스로 바뀜
                         draw_text('일시정지',
-                                  pygame.font.Font('NanumGothic.ttf', 60),
+                                  pygame.font.Font('./PySpaceShip/NanumGothic.ttf', 60),
                                   screen, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, YELLOW) #가운데에 일시정지 글씨 표시
             if event.type == QUIT: #QUIT이벤트가 발생하면 QUIT
                 return 'quit'
@@ -234,14 +234,14 @@ def game_screen():
     global score
     pygame.mouse.set_visible(True)
 
-    start_image = pygame.image.load('game_screen.png')
+    start_image = pygame.image.load('./PySpaceShip/game_screen.png')
     screen.blit(start_image, [0, 0])
 
     draw_text('우주 암석 피하기',
-              pygame.font.Font('NanumGothic.ttf', 50), screen,
+              pygame.font.Font('./PySpaceShip/NanumGothic.ttf', 50), screen,
               WINDOW_WIDTH / 2, WINDOW_HEIGHT / 3.0, WHITE)
     draw_text('마우스 버튼이나 "S"키를 누르면 게임이 시작됩니다.',
-              pygame.font.Font('NanumGothic.ttf', 20), screen,
+              pygame.font.Font('./PySpaceShip/NanumGothic.ttf', 20), screen,
               WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2.3, WHITE)
     draw_text('점수: {}'.format(score),
               default_font, screen,
@@ -272,5 +272,3 @@ def main_loop(): #main_loop로 액션을 취해줌
             action = game_loop()
 
     pygame.quit()
-
-main_loop()
