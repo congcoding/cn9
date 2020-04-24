@@ -124,12 +124,10 @@ def main_loop():
 
             #게임 다시 시작
             if crash:
-                #import Start
-                #if event.type == pygame.KEYDOWN and event.key == pygame.K_0:
-                #    Start.main_loop()
-                #    return 'main_screen'
-                    
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_0:
+                    import Start
+                    Start.main_loop()
+                elif event.type == pygame.KEYDOWN and event.key == pygame.K_SPACE:
                     crash = False
                     for i in range(car_count):
                         cars[i].x = random.randrange(0, WINDOW_WIDTH - cars[i].width)
