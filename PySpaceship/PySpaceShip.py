@@ -240,7 +240,7 @@ def game_screen():
     draw_text('우주 암석 피하기',
               pygame.font.Font('./PySpaceShip/NanumGothic.ttf', 50), screen,
               WINDOW_WIDTH / 2, WINDOW_HEIGHT / 3.0, WHITE)
-    draw_text('마우스 버튼이나 "S"키를 누르면 게임이 시작됩니다.',
+    draw_text('마우스 버튼이나 "1"키를 누르면 게임이 시작됩니다.',
               pygame.font.Font('./PySpaceShip/NanumGothic.ttf', 20), screen,
               WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2.3, WHITE)
     draw_text('점수: {}'.format(score),
@@ -254,7 +254,10 @@ def game_screen():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_q:
                 return 'quit'
-            elif event.key == pygame.K_s:
+            elif event.key == pygame.K_0:
+                import Start
+                Start.main_loop()
+            elif event.key == pygame.K_1:
                 return 'play'
         if event.type == pygame.MOUSEBUTTONDOWN:
             return 'play'

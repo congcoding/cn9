@@ -1,6 +1,8 @@
 import pygame
 import sys
 import random
+#import Start
+#from PyCar import racingcar
 from time import sleep
 
 
@@ -15,6 +17,7 @@ rockImage = ['./PyShooting/rock01.png','./PyShooting/rock02.png','./PyShooting/r
 explosionSound = ['./PyShooting/explosion01.wav','./PyShooting/explosion02.wav','./PyShooting/explosion03.wav','./PyShooting/explosion04.wav']
 
 
+    
 def writeScore(count):
     global gamePad
     font = pygame.font.Font('./PyShooting/NanumGothic.ttf', 20)
@@ -41,7 +44,14 @@ def writeMessage(text):
     gameOverSound.play()
     sleep(2)
     pygame.mixer.music.play(-1)
-    runGame()
+    #텍스트 출력 : 다시 하려면 1,메인으로 돌아가려면 0을 누르세
+    for event in pygame.event.get():
+            if event.type in [pygame.KEYDOWN]:
+                if event.key == pygame.K_0:
+                    import Start
+                    Start.main_loop()
+                elif event.key == pygame.K_1:
+                    runGame()
 
 
 def crash():
@@ -205,4 +215,3 @@ def runGame():
         clock.tick(60)
 
     pygame.quit()
-
