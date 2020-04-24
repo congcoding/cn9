@@ -1,12 +1,13 @@
 import gettext
 import math
 import random
-import sys
-from time import sleep
+
+from PySpaceship import PySpaceShip
+from PyCar import racingcar
+from PyShooting import PyShooting
 
 import pygame
 from pygame.locals import *
-
 
 WINDOW_WIDTH = 480
 WINDOW_HEIGHT = 600
@@ -43,13 +44,14 @@ def main_screen():
     for event in pygame.event.get():
         if event.type == pygame.KEYDOWN:
             if event.key == pygame.K_1:
-                print("keydown1")
+                PySpaceShip.main_loop()
                 return 'main_screen'
             elif event.key == pygame.K_2:
-                print("keydown2")
+                racingcar.main_loop()
                 return 'main_screen'
             elif event.key == pygame.K_3:
-                print("keydown3")
+                PyShooting.initGame()
+                PyShooting.runGame()
                 return 'main_screen'
         if event.type == QUIT:
             return 'quit'
