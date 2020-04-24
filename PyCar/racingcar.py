@@ -66,7 +66,7 @@ def draw_score():
     txt_score = font_30.render("Score: " + str(score), True, BLACK)
     screen.blit(txt_score, [15, 15])  
 
-if __name__ == '__main__':
+if True: #__name__ == '__main__':
 
     pygame.init()
 
