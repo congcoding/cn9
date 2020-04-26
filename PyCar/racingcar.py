@@ -1,4 +1,6 @@
+import gettext
 import pygame
+from pygame.locals import *
 import random
 from time import sleep
 
@@ -11,11 +13,13 @@ WINDOW_WIDTH = 480
 WINDOW_HEIGHT = 600
 
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
+default_font = pygame.font.Font('./PyCar/NanumGothic.ttf', 28)
 
 BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GRAY = (150, 150, 150)
 RED = (255, 0, 0)
+PURPLE = (204, 153, 255)
 
 class Car:
     image_car = ['./PyCar/RacingCar01.png', './PyCar/RacingCar02.png', './PyCar/RacingCar03.png', './PyCar/RacingCar04.png', './PyCar/RacingCar05.png', \
@@ -54,18 +58,39 @@ class Car:
         else:
             return False
 
+def draw_text(text, font, surface, x, y, main_color):
+    text_obj = font.render(text, True, main_color)
+    text_rect = text_obj.get_rect()
+    text_rect.centerx = x
+    text_rect.centery = y
+    surface.blit(text_obj, text_rect) 
+
 def draw_main_menu(score):
+    screen.fill(PURPLE)
     draw_x = (WINDOW_WIDTH / 2) - 200
     draw_y = WINDOW_HEIGHT / 2
-    image_intro = pygame.image.load('./PyCar/PyCar.png')
-    screen.blit(image_intro, [draw_x, draw_y - 280])
+    #image_intro = pygame.image.load('./PyCar/PyCar.png')
+    image_intro = pygame.image.load('./PyCar/PyCar2.png')
+    screen.blit(image_intro, [draw_x + 40, draw_y - 280])
     font_40 = pygame.font.SysFont("FixedSys", 40, True, False)
     font_30 = pygame.font.SysFont("FixedSys", 30, True, False)
-    text_title = font_40.render("PyCar: Racing Car Game", True, BLACK)
-    screen.blit(text_title, [draw_x, draw_y])
+    #text_title = font_40.render("PyCar: Racing Car Game", True, BLACK)
+    #text_title = font_40.render("카레이서 수룡이의 레이싱 게임", True, BLACK)
+    #screen.blit(text_title, [draw_x, draw_y])
+    draw_text('카레이서 수룡이의 레이싱 게임!',
+              pygame.font.Font('./PyCar/NanumGothic.ttf', 30), screen,
+              draw_x+200, draw_y, (51, 0, 153))
     score_text = font_40.render("Score: " + str(score), True, WHITE)
     screen.blit(score_text, [draw_x, draw_y + 70])
-    text_start = font_30.render("Press Space Key to Start!", True, RED)
+    #text_start = font_30.render("Press Space Key to Start!", True, RED)
+    #text_start = font_30.render("시작하려면 스페이스 키를 누르세요\n 나가려면 0을 누르세요!", True, RED)
+    #screen.blit(text_start, [draw_x, draw_y + 100])
+    draw_text('시작하려면 스페이스 키를 누르세요',
+              pygame.font.Font('./PyCar/NanumGothic.ttf', 20), screen,
+              draw_x+200, draw_y+150, (102, 51, 255))
+    draw_text('나가려면 0을 누르세요!',
+              pygame.font.Font('./PyCar/NanumGothic.ttf', 20), screen,
+              draw_x+200, draw_y+175, (102, 51, 255))
     pygame.display.flip()
 
 def draw_score(score):
@@ -76,7 +101,7 @@ def draw_score(score):
 def main_loop():
     pygame.init()
 
-    pygame.display.set_caption("PyCar: Racing Car Game")
+    pygame.display.set_caption("카레이서 수룡이의 레이싱 게임!")
     clock = pygame.time.Clock()
 
     #게임 사운드
