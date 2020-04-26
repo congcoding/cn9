@@ -24,6 +24,10 @@ fps_clock = pygame.time.Clock()
 FPS = 60
 score = 0
 
+# 확률로 발생하던 warp를 5초마다 발생하게 하기 위해서 USEREVENT 생성
+warp_event = pygame.USEREVENT + 1
+pygame.time.set_timer(warp_event, 5000)
+
 default_font = pygame.font.Font('./PySpaceShip/NanumGothic.ttf', 28)
 background_img = pygame.image.load('./PySpaceShip/background.jpg')
 explosion_sound = pygame.mixer.Sound('./PySpaceShip/explosion.wav')
@@ -65,7 +69,6 @@ class Rock(pygame.sprite.Sprite): #암석 객체
         self.rect.y = ypos
         self.hspeed = hspeed
         self.vspeed = vspeed
-
         self.set_direction()
 
     def set_direction(self):    # 암석의 방향에 따라 이미지를 기울여주는 함수
@@ -109,7 +112,6 @@ class Warp(pygame.sprite.Sprite):   #Warp 아이템 : spaceship과 동일
         self.rect.x = x - self.rect.centerx
         self.rect.y = y - self.rect.centery
 
-        
 def draw_repeating_background(background_img): #배경 이미지 반복하는 함수
     background_rect = background_img.get_rect() #WIDTH / 배경이미지 width한 후 올림
     for i in range(int(math.ceil(WINDOW_WIDTH / background_rect.width))):
@@ -126,7 +128,6 @@ def draw_text(text, font, surface, x, y, main_color):
     text_rect.centery = y
     surface.blit(text_obj, text_rect)   #36분 48초 : 텍스트가 어떤 font에 어떤 text를 이 surface에다가 blit해줘 그런데 그거에 대해서 우리가 메인 컬러로 렌더링한 값으로 넣어주는 함수
 
-
 def game_loop():    #실제 게임 엔진
     global score
 
@@ -137,7 +138,7 @@ def game_loop():    #실제 게임 엔진
     spaceship.set_pos(*pygame.mouse.get_pos())   #*은 가변의미, 마우스의 현재 위치가 우주선의 현재 위치가 됨
     rocks = pygame.sprite.Group()   #암석을 sprite를 사용해 그룹으로 관리
     warps = pygame.sprite.Group()   #워프를 sprite를 사용해 그룹으로 관리
-    
+
     min_rock_speed = 1  #암석 최소 속도
     max_rock_speed = 1  #암석 최대 속도
     occur_of_rocks = 1  #암석을 보낼 때 몇 개씩 보낼지 (score가 높아지면 난이도 증가)
@@ -159,11 +160,6 @@ def game_loop():    #실제 게임 엔진
             for i in range(occur_of_rocks):
                 rocks.add(random_rock(random.randint(min_rock_speed, max_rock_speed)))
                 score += 1 #암석이 하나 증가되면 score + 1
-
-        if random.randint(1, occur_prob * 5) == 1: #warp가 생길 확률을 1/150(10일때, 너무 안나와서 5로 바꿈)으로 설정
-            warp = Warp(random.randint(30, WINDOW_WIDTH - 30),
-                        random.randint(30, WINDOW_HEIGHT - 30)) #너무 가장자리에 나오면 안되므로 margin 설정
-            warps.add(warp)
 
         draw_text('점수: {}'.format(score), default_font, screen, 80, 20, YELLOW) # 점수 출력
         draw_text('워프: {}'.format(warp_count), default_font, screen, 380, 20, BLUE)
@@ -192,6 +188,9 @@ def game_loop():    #실제 게임 엔진
         # 여기까지 화면 업데이트 부분, 아래부터 컨트롤 부분
 
         for event in pygame.event.get():
+            if event.type == warp_event: # 5초마다 워프 생성
+                warp = Warp(random.randint(30, WINDOW_WIDTH - 30), random.randint(30, WINDOW_HEIGHT - 30)) #너무 가장자리에 나오면 안되므로 margin 설정
+                warps.add(warp)
             if event.type == pygame.MOUSEMOTION:
                 mouse_pos = pygame.mouse.get_pos()
                 if mouse_pos[0] <= 10:  #mouse가 왼쪽으로 나가면(mouse_pos[0] = 마우스의 x좌표)
@@ -207,12 +206,10 @@ def game_loop():    #실제 게임 엔진
                 if warp_count > 0:  #워프가 있으면
                     warp_count -= 1     #워프를 사용하므로 -1
                     warp_sound.play()   #워프 사운드
-                    sleep(1)    #전환을 위해 약간 지연
                     rocks.empty()   #워프했으니 암석을 모두 제거
             if event.type == QUIT: #QUIT이벤트가 발생하면 QUIT
                 return 'quit'   
     return 'game_screen' #end while -> screen으로 이동
-
 
 def game_screen():
     global score
@@ -230,7 +227,6 @@ def game_screen():
     draw_text('점수: {}'.format(score),
               default_font, screen,
               WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2.0, YELLOW)    
-
 
     pygame.display.update()
 
