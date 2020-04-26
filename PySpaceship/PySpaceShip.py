@@ -162,7 +162,7 @@ def game_loop():    #실제 게임 엔진
                 score += 1 #암석이 하나 증가되면 score + 1
 
         draw_text('점수: {}'.format(score), default_font, screen, 80, 20, YELLOW) # 점수 출력
-        draw_text('워프: {}'.format(warp_count), default_font, screen, 380, 20, BLUE)
+        draw_text('수정: {}'.format(warp_count), default_font, screen, 380, 20, BLUE)
         rocks.update()
         warps.update()
         rocks.draw(screen)
