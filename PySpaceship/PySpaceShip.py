@@ -163,7 +163,7 @@ def game_loop():    #실제 게임 엔진
                 score += 1 #암석이 하나 증가되면 score + 1
 
         draw_text('점수: {}'.format(score), default_font, screen, 80, 20, YELLOW) # 점수 출력
-        draw_text('수정: {}'.format(warp_count), default_font, screen, 380, 20, BLUE)
+        draw_text('수정구: {}'.format(warp_count), default_font, screen, 380, 20, BLUE)
         rocks.update()
         warps.update()
         rocks.draw(screen)
@@ -229,13 +229,25 @@ def game_screen():
 
     draw_text('우주 암석 피하기',
               pygame.font.Font('./PySpaceShip/NanumGothic.ttf', 50), screen,
-              WINDOW_WIDTH / 2, WINDOW_HEIGHT / 3.0, WHITE)
+              WINDOW_WIDTH / 2, 100, (255, 255, 255))
+    draw_text('마우스를 움직여서 수룡이가 암석을 피할 수 있게 도와주세요!',
+              pygame.font.Font('./PySpaceShip/NanumGothic.ttf', 18), screen,
+              WINDOW_WIDTH / 2, 170, WHITE)
+    draw_text('게임 중 수정구 아이템을 획득할 수 있습니다.',
+              pygame.font.Font('./PySpaceShip/NanumGothic.ttf', 18), screen,
+              WINDOW_WIDTH / 2, 210, WHITE)
+    draw_text('클릭으로 수정구를 사용하여 암석을 모두 제거할 수 있습니다.',
+              pygame.font.Font('./PySpaceShip/NanumGothic.ttf', 18), screen,
+              WINDOW_WIDTH / 2, 250, WHITE)
     draw_text('마우스 버튼이나 "1"키를 누르면 게임이 시작됩니다.',
-              pygame.font.Font('./PySpaceShip/NanumGothic.ttf', 20), screen,
-              WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2.3, WHITE)
+              pygame.font.Font('./PySpaceShip/NanumGothic.ttf', 18), screen,
+              WINDOW_WIDTH / 2, 310, (255, 255, 255))
+    draw_text('"0"키를 누르면 메인화면으로 돌아갑니다.',
+              pygame.font.Font('./PySpaceShip/NanumGothic.ttf', 18), screen,
+              WINDOW_WIDTH / 2, 350, (255, 255, 255))
     draw_text('점수: {}'.format(score),
               default_font, screen,
-              WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2.0, YELLOW)    
+              WINDOW_WIDTH / 2, 390, YELLOW)    
 
     pygame.display.update()
 
