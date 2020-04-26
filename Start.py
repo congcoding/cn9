@@ -5,6 +5,7 @@ import random
 from PySpaceship import PySpaceShip
 from PyCar import racingcar
 from PyShooting import PyShooting
+import Ranking
 
 import pygame
 from pygame.locals import *
@@ -29,15 +30,15 @@ def draw_text(text, font, surface, x, y, main_color):
 def main_screen():
     pygame.mouse.set_visible(True)
 
-    start_image = pygame.image.load('./PySpaceship/game_screen.png')
+    start_image = pygame.image.load('main.png')
     screen.blit(start_image, [0, 0])
 
-    draw_text('게임 1', default_font, 
-               screen, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 1.5, WHITE)
-    draw_text('게임 2', default_font, 
-               screen, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2.0, WHITE)
-    draw_text('게임 3', default_font, 
-               screen, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2.5, WHITE)
+    # draw_text('게임 1', default_font, 
+    #            screen, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 1.5, WHITE)
+    # draw_text('게임 2', default_font, 
+    #            screen, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2.0, WHITE)
+    # draw_text('게임 3', default_font, 
+    #            screen, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2.5, WHITE)
 
     pygame.display.update()
 
@@ -52,6 +53,9 @@ def main_screen():
             elif event.key == pygame.K_3:
                 PyShooting.initGame()
                 PyShooting.runGame()
+                return 'main_screen'
+            elif event.key == pygame.K_4:
+                Ranking.main_loop()
                 return 'main_screen'
         if event.type == QUIT:
             return 'quit'
