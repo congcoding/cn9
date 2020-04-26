@@ -2,6 +2,7 @@ import gettext
 import math
 import random
 import pickle
+import cx_Oracle
 import sys
 from time import sleep
 
@@ -19,7 +20,7 @@ BLUE = (20, 20, 250)
 pygame.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 pygame.display.set_caption('PySpaceShip : 우주 암석 피하기 게임')
-pygame.display.set_icon(pygame.image.load('./PySpaceShip/warp.png'))
+pygame.display.set_icon(pygame.image.load('./PySpaceShip/icon.jpg'))
 fps_clock = pygame.time.Clock()
 FPS = 60
 score = 0
@@ -173,11 +174,19 @@ def game_loop():    #실제 게임 엔진
             explosion_sound.play()      #충돌 사운드 출력
             pygame.mixer.music.stop()   #게임이 끝나기 전에 음악 중단
             rocks.empty()               #전체 암석을 없애고
+            # pickle을 이용해 파일에 score 저장
             PySpaceshipRankingList = pickle.load(open("./PySpaceship/PySpaceshipRanking.pic", "rb"))
             # print("before", PySpaceshipRankingList)
             PySpaceshipRankingList.append(score)
             pickle.dump(PySpaceshipRankingList, open("./PySpaceship/PySpaceshipRanking.pic", "wb"))
             # print("after", PySpaceshipRankingList)
+            # DB를 이용해 score 저장
+            conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
+            cursor = conn.cursor()
+            cursor.execute("insert into PYSPACESHIP(score) values ('%d')" % (score))
+            conn.commit()
+            cursor.close()
+            conn.close()
             return 'game_screen'        #game_screen으로 돌아감
         elif warp: #워프에 우주선이 닿으면 아이템 획득의 의미
             warp_count += 1  #워프의 개수를 증가시키고      
