@@ -1,6 +1,7 @@
 import gettext
 import math
 import random
+import pickle
 import sys
 from time import sleep
 
@@ -159,10 +160,10 @@ def game_loop():    #실제 게임 엔진
                 rocks.add(random_rock(random.randint(min_rock_speed, max_rock_speed)))
                 score += 1 #암석이 하나 증가되면 score + 1
 
-            if random.randint(1, occur_prob * 5) == 1: #warp가 생길 확률을 1/150(10일때, 너무 안나와서 5로 바꿈)으로 설정
-                warp = Warp(random.randint(30, WINDOW_WIDTH - 30),
-                            random.randint(30, WINDOW_HEIGHT - 30)) #너무 가장자리에 나오면 안되므로 margin 설정
-                warps.add(warp)
+        if random.randint(1, occur_prob * 5) == 1: #warp가 생길 확률을 1/150(10일때, 너무 안나와서 5로 바꿈)으로 설정
+            warp = Warp(random.randint(30, WINDOW_WIDTH - 30),
+                        random.randint(30, WINDOW_HEIGHT - 30)) #너무 가장자리에 나오면 안되므로 margin 설정
+            warps.add(warp)
 
         draw_text('점수: {}'.format(score), default_font, screen, 80, 20, YELLOW) # 점수 출력
         draw_text('워프: {}'.format(warp_count), default_font, screen, 380, 20, BLUE)
@@ -176,6 +177,11 @@ def game_loop():    #실제 게임 엔진
             explosion_sound.play()      #충돌 사운드 출력
             pygame.mixer.music.stop()   #게임이 끝나기 전에 음악 중단
             rocks.empty()               #전체 암석을 없애고
+            PySpaceshipRankingList = pickle.load(open("./PySpaceship/PySpaceshipRanking.pic", "rb"))
+            # print("before", PySpaceshipRankingList)
+            PySpaceshipRankingList.append(score)
+            pickle.dump(PySpaceshipRankingList, open("./PySpaceship/PySpaceshipRanking.pic", "wb"))
+            # print("after", PySpaceshipRankingList)
             return 'game_screen'        #game_screen으로 돌아감
         elif warp: #워프에 우주선이 닿으면 아이템 획득의 의미
             warp_count += 1  #워프의 개수를 증가시키고      
