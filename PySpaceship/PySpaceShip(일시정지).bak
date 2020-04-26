@@ -143,16 +143,26 @@ def game_loop():    #실제 게임 엔진
     occur_prob = 15     #암석 발생 확률
     score = 0
     warp_count = 1
+    paused = False #p버튼을 누르면 일시정지할 수 있게 하는 기능
 
     while True:
         pygame.display.update() #게임 화면이 계속 update되어야 하므로
         fps_clock.tick(FPS)     #fps를 전역으로 선언해놓은 FPS=60으로 설정
 
-        draw_repeating_background(background_img)
+        if paused:
+            for event in pygame.event.get(): 
+                if event.type == pygame.KEYDOWN:    #키를 누르는 event 가져오기
+                    if event.key == pygame.K_p:     #눌러진 키가 p면
+                        paused = not paused         #paused를 toggle
+                        pygame.mouse.set_visible(False)     #마우스를 안보이게
+                if event.type == QUIT:  #42:27 event가 QUIT일 때?
+                    return 'quit'
+        else:
+            draw_repeating_background(background_img)
 
-        occur_of_rocks = 1 + int(score / 500) #난이도와 관련
-        min_rock_speed = 1 + int(score / 400)
-        max_rock_speed = 1 + int(score / 300)
+            occur_of_rocks = 1 + int(score / 500) #난이도와 관련
+            min_rock_speed = 1 + int(score / 400)
+            max_rock_speed = 1 + int(score / 300)
     
         if random.randint(1, occur_prob) == 1:
             for i in range(occur_of_rocks):
@@ -203,8 +213,20 @@ def game_loop():    #실제 게임 엔진
                     warp_sound.play()   #워프 사운드
                     sleep(1)    #전환을 위해 약간 지연
                     rocks.empty()   #워프했으니 암석을 모두 제거
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_p:     #p를 누르면
+                    paused = not paused     #p를 토글
+                    if paused:  #일시정지 상태이면
+                        transp_surf = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT)) #화면 크기만큼
+                        transp_surf.set_alpha(150) #150정도 주면 불투명해짐
+                        screen.blit(transp_surf, transp_surf.get_rect())
+                        pygame.mouse.set_visible(True) #일시정지 상태이면 마우스 모양이 우주선에서 마우스로 바뀜
+                        draw_text('일시정지',
+                                  pygame.font.Font('./PySpaceShip/NanumGothic.ttf', 60),
+                                  screen, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, YELLOW) #가운데에 일시정지 글씨 표시
             if event.type == QUIT: #QUIT이벤트가 발생하면 QUIT
-                return 'quit'   
+                return 'quit'
+            
     return 'game_screen' #end while -> screen으로 이동
 
 
