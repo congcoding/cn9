@@ -3,7 +3,8 @@ import pygame
 from pygame.locals import *
 import random
 from time import sleep
-
+import pickle
+import cx_Oracle
 import os
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
@@ -143,6 +144,11 @@ def main_loop():
                 game_on = False
                 
             if crash:
+                f = open("test.txt", 'w')
+                f.write(str(score)+"\n")
+                f.close()
+
+                
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_0:
                     import Start
                     Start.main_loop()
