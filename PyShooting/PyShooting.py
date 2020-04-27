@@ -1,8 +1,6 @@
 import pygame
 import sys
 import random
-#import Start
-#from PyCar import racingcar
 from time import sleep
 
 
@@ -15,6 +13,7 @@ rockImage = ['./PyShooting/rock01.png','./PyShooting/rock02.png','./PyShooting/r
              './PyShooting/rock21.png','./PyShooting/rock22.png','./PyShooting/rock23.png','./PyShooting/rock24.png','./PyShooting/rock25.png',\
              './PyShooting/rock26.png','./PyShooting/rock27.png','./PyShooting/rock28.png','./PyShooting/rock29.png','./PyShooting/rock30.png']
 explosionSound = ['./PyShooting/explosion01.wav','./PyShooting/explosion02.wav','./PyShooting/explosion03.wav','./PyShooting/explosion04.wav']
+
 
 
     
@@ -34,13 +33,13 @@ def writePassed(count):
 def writeMenu():
     global gamePad
     font = pygame.font.Font('./PyShooting/NanumGothic.ttf', 15)
-    text = font.render('메인으로 나가기 "0" 다시 시작하기 "1"', True, (100, 100, 100))
+    text = font.render('메인으로 "0" 다시 시작하기 "1"', True, (100, 100, 100))
     gamePad.blit(text, (10, 25))
 
 
 def writeMessage(text):
     global gamePad, gameOverSound
-    textfont = pygame.font.Font('./PyShooting/NanumGothic.ttf', 80)
+    textfont = pygame.font.Font('./PyShooting/NanumGothic.ttf', 15)
     text = textfont.render(text, True, (255, 0, 0))
     textpos = text.get_rect()
     textpos.center = (padWidth / 2, padHeight / 2)
@@ -48,18 +47,28 @@ def writeMessage(text):
     pygame.display.update()
     pygame.mixer.music.stop()
     gameOverSound.play()
-    sleep(2)
-    pygame.mixer.music.play(-1)
-    runGame()
+    sleep(1)
+    while True:
+        event = pygame.event.wait()
+        if event.type in [pygame.QUIT]:
+            pygame.quit()
+            sys.exit()
+        if event.type in [pygame.KEYDOWN]:
+            if event.key == pygame.K_0:
+                import Start
+                Start.main_loop()
+            elif event.key == pygame.K_1:
+                pygame.mixer.music.play(-1)
+                runGame()
 
 
 def crash():
     global gamePad
-    writeMessage('전투기 파괴!')
+    writeMessage('전투기 파괴! 메인으로 "0" 다시 시작하기 "1"')
 
 def gameOver():
     global gamePad
-    writeMessage('게임 오버!')
+    writeMessage('게임 오버! 메인으로 "0" 다시 시작하기 "1"')
 
 def drawObject(obj, x, y):
     global gamePad
@@ -128,15 +137,15 @@ def runGame():
                     missileX = x + fighterWidth/2
                     missileY = y - fighterHeight
                     missileXY.append([missileX, missileY])
-                """
-                if event.key == pygame.K_0:
+
+                if event.key == pygame.K_0: # 실행은 잘 되는데 쉘에 오류 뜸
                     pygame.mixer.music.stop()
                     import Start
-                    Start.main_loop() 
+                    Start.main_loop()
+
                 elif event.key == pygame.K_1:
                     pygame.mixer.music.play(-1)
                     runGame()
-                """
 
             if event.type in [pygame.KEYUP]:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
