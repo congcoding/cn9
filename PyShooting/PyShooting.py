@@ -39,18 +39,20 @@ def writeMenu():
     gamePad.blit(text, (10, 25))
 
 
-def writeMessage(text):
+def writeMessage(text, count):
     global gamePad, gameOverSound
     
     # 랭킹 부분
     # pickle을 이용해 파일에 score 저장
     PyShootingRankingList = pickle.load(open("./PyShooting/PyShootingRanking.pic", "rb"))
-    PyShootingRankingList.append(shotCount)
+    PyShootingRankingList.append(count)
     pickle.dump(PyShootingRankingList, open("./PyShooting/PyShootingRanking.pic", "wb"))
+    print("저장1", count)
     # DB를 이용해 score 저장
+    print("저장2", count)
     conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
     cursor = conn.cursor()
-    cursor.execute("insert into PYSPACESHIP(score) values ('%d')" % (score))
+    cursor.execute("insert into PYSPACESHIP(score) values ('%d')" % (count))
     conn.commit()
     cursor.close()
     conn.close()
@@ -78,13 +80,13 @@ def writeMessage(text):
                 runGame()
 
 
-def crash():
+def crash(count):
     global gamePad
-    writeMessage('전투기 파괴! 메인으로 "0" 다시 시작하기 "1"')
+    writeMessage('전투기 파괴! 메인으로 "0" 다시 시작하기 "1"', count)
 
-def gameOver():
+def gameOver(count):
     global gamePad
-    writeMessage('게임 오버! 메인으로 "0" 다시 시작하기 "1"')
+    writeMessage('게임 오버! 메인으로 "0" 다시 시작하기 "1"', count)
 
 def drawObject(obj, x, y):
     global gamePad
@@ -178,7 +180,7 @@ def runGame():
         #운석과 충돌
         if y < rockY + rockHeight:
             if(rockX > x and rockX < x + fighterWidth) or (rockX + rockWidth > x and rockX + rockWidth <  x + fighterWidth):
-                crash()
+                crash(shotCount)
 
         drawObject(fighter, x, y)
 
@@ -219,7 +221,7 @@ def runGame():
             rockPassed += 1
 
         if rockPassed == 3:
-            gameOver()
+            gameOver(shotCount)
 
         writePassed(rockPassed)
 
