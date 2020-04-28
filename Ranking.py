@@ -110,17 +110,19 @@ def ranking_screen():
     draw_text("PyShooting(Online)", default_font, screen, 360, 450,  BLACK)
     conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
     cursor = conn.cursor()
-    cursor.execute("select * from pyshooting order by score desc")
+    cursor.execute("select * from ranking where gamecode = 3 order by score desc")
     PyShootingOnlineRankingList = cursor.fetchall()
     conn.commit()
     cursor.close()
     conn.close()
     if len(PyShootingOnlineRankingList) >= 4:
         for i in range(0, 4):
-            draw_text(str(PyShootingOnlineRankingList[i]), default_font, screen, 360, 470 + (i * 30),  BLACK)
+            draw_text(str(PyShootingOnlineRankingList[i][2]), default_font, screen, 380, 470 + (i * 30),  BLACK)
+            draw_text(str(PyShootingOnlineRankingList[i][1]), default_font, screen, 330, 470 + (i * 30),  BLACK)
     else:
         for i in range(0, len(PyShootingOnlineRankingList)):
-            draw_text(str(PyShootingOnlineRankingList[i]), default_font, screen, 360, 470 + (i * 30),  BLACK)
+            draw_text(str(PyShootingOnlineRankingList[i][2]), default_font, screen, 380, 470 + (i * 30),  BLACK)
+            draw_text(str(PyShootingOnlineRankingList[i][1]), default_font, screen, 330, 470 + (i * 30),  BLACK)
 
     pygame.display.update()
 
