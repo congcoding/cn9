@@ -215,16 +215,11 @@ def main_loop():
                     # 한글 설정
                     os.putenv('NLS_LANG', '.UTF8')
                     
-                    #cursor.execute("select * from pycar")
-                    #result = cursor.fetchall()
-                    #print(result)
-
-                    #PyCarRankingList = [0]
-                    #with open('PyCarRanking.pic', 'wb') as f:
-                    #    pickle.dump(score, f)
-                    
                     # pickle을 이용해 파일에 score 저장
-                    PyCarRankingList = pickle.load(open("./PyCar/PyCarRanking.pic", "rb"))
+                    try:
+                        PyCarRankingList = pickle.load(open("./PyCar/PyCarRanking.pic", "rb"))
+                    except:
+                        PyCarRankingList = []
                     PyCarRankingList.append(score)
                     pickle.dump(PyCarRankingList, open("./PyCar/PyCarRanking.pic", "wb"))
                     # DB 연결
