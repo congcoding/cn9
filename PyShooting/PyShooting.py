@@ -53,7 +53,7 @@ def writeMessage(text):
         if event.type in [pygame.QUIT]:
             pygame.quit()
             sys.exit()
-        if event.type in [pygame.KEYDOWN]:
+        if event.type in [pygame.KEYDOWN]: # 실행은 잘 되는데 쉘에 오류 뜸
             if event.key == pygame.K_0:
                 import Start
                 Start.main_loop()
@@ -99,7 +99,7 @@ def runGame():
     fighterHeight = fighterSize[1]
 
     x = padWidth * 0.45
-    y = padHeight * 0.9
+    y = padHeight * 0.85
     fighterX = 0
 
     
@@ -134,7 +134,7 @@ def runGame():
 
                 elif event.key == pygame.K_SPACE:
                     missileSound.play()
-                    missileX = x + fighterWidth/2
+                    missileX = x + fighterWidth/2 # 수정구 발사 위치 조정
                     missileY = y - fighterHeight
                     missileXY.append([missileX, missileY])
 
@@ -185,7 +185,7 @@ def runGame():
 
         if len(missileXY) != 0:
             for bx, by in missileXY:
-                drawObject(missile, bx, by)
+                drawObject(missile, bx - 20, by) # 수정구 발사 위치 조정
 
         writeMenu()
         writeScore(shotCount)
