@@ -1,3 +1,5 @@
+#-*- encoding: utf-8 -*-
+
 import gettext
 import pygame
 from pygame.locals import *
@@ -6,9 +8,13 @@ from time import sleep
 import pickle
 import cx_Oracle
 import os
+os.putenv('NLS_LANG', '.UTF8')
+
 import sys
 sys.path.append(os.path.dirname(os.path.abspath(os.path.dirname(os.path.abspath(os.path.dirname(__file__))))))
 
+from tkinter import *
+from tkinter import messagebox
 
 WINDOW_WIDTH = 480
 WINDOW_HEIGHT = 600
@@ -86,13 +92,18 @@ def draw_main_menu(score):
     score_text = font_40.render("Score: " + str(score), True, WHITE)
     screen.blit(score_text, [draw_x, draw_y + 70])
     #text_start = font_30.render("Press Space Key to Start!", True, RED)
-    #text_start = font_30.render("시작하려면 스페이스 키를 누르세요\n 나가려면 0을 누르세요!", True, RED)
     #screen.blit(text_start, [draw_x, draw_y + 100])
+    draw_text('수룡이가 레이싱에서 이길 수 있게 도와주세요~',
+              pygame.font.Font('./PyCar/NanumGothic.ttf', 20), screen,
+              draw_x+200, draw_y+60, BLACK)
+    draw_text('방향키를 이용해 자동차를 피해주세요',
+              pygame.font.Font('./PyCar/NanumGothic.ttf', 15), screen,
+              draw_x+200, draw_y+100, (19, 2, 171))
     draw_text('시작하려면 스페이스 키를 누르세요',
-              pygame.font.Font('./PyCar/NanumGothic.ttf', 20), screen,
+              pygame.font.Font('./PyCar/NanumGothic.ttf', 15), screen,
               draw_x+200, draw_y+130, (19, 2, 171))
-    draw_text('나가려면 0을 누르세요!',
-              pygame.font.Font('./PyCar/NanumGothic.ttf', 20), screen,
+    draw_text('나가려면 0을 누르세요',
+              pygame.font.Font('./PyCar/NanumGothic.ttf', 15), screen,
               draw_x+200, draw_y+155, (19, 2, 171))
     pygame.display.flip()
 
@@ -208,6 +219,40 @@ def main_loop():
             #레이싱 카 충돌사고 체크
             for i in range(car_count):
                 if player.check_crash(cars[i]):
+                    # name 입력하는 부분
+                    root = Tk()
+
+                    # 버튼 클릭 이벤트 핸들러
+                    def okClick():
+                        name = txt.get()
+                        if len(name)==0:
+                            messagebox.showinfo("완료", "이름 없이 저장되었습니다")
+                            name = "익명"
+                        else:
+                            messagebox.showinfo("완료", "저장되었습니다")
+                        
+                        # DB를 이용해 score 저장
+                        conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
+                        cursor = conn.cursor()
+                        cursor.execute("insert into ranking(gamecode, name, score) values ('%d', '%s', '%d')" % (2, name[:5], score))
+                        conn.commit()
+                        cursor.close()
+                        conn.close()
+
+                        root.destroy()
+
+                    root.title('이름 입력') # 타이틀
+                    root.geometry('230x60+190+350')
+                    
+                    lbl = Label(root, text="이름(최대 5글자)")
+                    lbl.grid(row=0, column=0)
+                    txt = Entry(root)
+                    txt.grid(row=0, column=1)
+                    btn = Button(root, text="OK", width=15, command=okClick)
+                    btn.grid(row=1, column=1)
+                    
+                    root.mainloop()
+                    
                     #f = open("test.txt", 'w')
                     #f.write(str(score)+"\n")
                     #f.close()
@@ -223,15 +268,15 @@ def main_loop():
                     PyCarRankingList.append(score)
                     pickle.dump(PyCarRankingList, open("./PyCar/PyCarRanking.pic", "wb"))
                     # DB 연결
-                    connection = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
-                    cursor = connection.cursor()
+                    #connection = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
+                    #cursor = connection.cursor()
                     # 쿼리 실행
-                    cursor.execute("insert into pycar(score) values ('%d')" % (score))
+                    #cursor.execute("insert into pycar(score) values ('%d')" % (score))
                     # commit
-                    connection.commit()
+                    #connection.commit()
                     # close
-                    cursor.close()
-                    connection.close()
+                    #cursor.close()
+                    #connection.close()
                     
                     crash = True
                     pygame.mixer.music.stop()

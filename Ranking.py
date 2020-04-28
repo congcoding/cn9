@@ -45,19 +45,23 @@ def ranking_screen():
         draw_text(str(PySpaceshipLocalRankingList[i]), default_font, screen, 120, 180 + (i * 30),  BLACK)
     # DB에서 점수 정보 가져오기
     draw_text("우주에서 살아남기(Online)", default_font, screen, 360, 150,  BLACK)
-    conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
-    cursor = conn.cursor()
-    cursor.execute("select * from ranking where gamecode = 1 order by score desc")
-    PySpaceshipOnlineRankingList = cursor.fetchall()
-    conn.commit()
-    cursor.close()
-    conn.close()
-    length = len(PySpaceshipOnlineRankingList)
-    if length > 4:
-        length = 4
-    for i in range(0, length):
-        draw_text(str(PySpaceshipOnlineRankingList[i][1]), default_font, screen, 330, 180 + (i * 30),  BLACK)
-        draw_text(str(PySpaceshipOnlineRankingList[i][2]), default_font, screen, 390, 180 + (i * 30),  BLACK)
+    try :
+        conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
+        cursor = conn.cursor()
+        cursor.execute("select * from ranking where gamecode = 1 order by score desc")
+        PySpaceshipOnlineRankingList = cursor.fetchall()
+        conn.commit()
+        cursor.close()
+        conn.close()
+    
+        length = len(PySpaceshipOnlineRankingList)
+        if length > 4:
+            length = 4
+        for i in range(0, length):
+            draw_text(str(PySpaceshipOnlineRankingList[i][1]), default_font, screen, 330, 180 + (i * 30),  BLACK)
+            draw_text(str(PySpaceshipOnlineRankingList[i][2]), default_font, screen, 390, 180 + (i * 30),  BLACK)
+    except :
+        draw_text("인터넷에 연결할 수 없습니다.", default_font, screen, 360, 180,  BLACK)
 
     #<PyCar 점수>
     # 파일에서 점수 정보 가져오기
@@ -76,21 +80,24 @@ def ranking_screen():
 
     # DB에서 점수 정보 가져오기
     draw_text("수룡이의 레이싱(Online)", default_font, screen, 360, 300,  BLACK)
-    connection = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
-    cursor = connection.cursor()
-    cursor.execute("select * from ranking where gamecode = 2 order by score desc")
-    PyCarOnlineRankingList = cursor.fetchall()
-    connection.commit()
-    cursor.close()
-    connection.close()
-    if len(PyCarOnlineRankingList) >= 4:
-        for i in range(0, 4):
-            draw_text(str(PyCarOnlineRankingList[i][2]), default_font, screen, 390, 330 + (i * 30),  BLACK)
-            draw_text(str(PyCarOnlineRankingList[i][1]), default_font, screen, 330, 330 + (i * 30),  BLACK)
-    else:
-        for i in range(0, len(PyCarOnlineRankingList)):
-            draw_text(str(PyCarOnlineRankingList[i][2]), default_font, screen, 390, 330 + (i * 30),  BLACK)
-            draw_text(str(PyCarOnlineRankingList[i][1]), default_font, screen, 330, 330 + (i * 30),  BLACK)
+    try:
+        connection = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
+        cursor = connection.cursor()
+        cursor.execute("select * from ranking where gamecode = 2 order by score desc")
+        PyCarOnlineRankingList = cursor.fetchall()
+        connection.commit()
+        cursor.close()
+        connection.close()
+        if len(PyCarOnlineRankingList) >= 4:
+            for i in range(0, 4):
+                draw_text(str(PyCarOnlineRankingList[i][2]), default_font, screen, 390, 330 + (i * 30),  BLACK)
+                draw_text(str(PyCarOnlineRankingList[i][1]), default_font, screen, 330, 330 + (i * 30),  BLACK)
+        else:
+            for i in range(0, len(PyCarOnlineRankingList)):
+                draw_text(str(PyCarOnlineRankingList[i][2]), default_font, screen, 390, 330 + (i * 30),  BLACK)
+                draw_text(str(PyCarOnlineRankingList[i][1]), default_font, screen, 330, 330 + (i * 30),  BLACK)
+    except:
+        draw_text("인터넷에 연결할 수 없습니다.", default_font, screen, 360, 330,  BLACK)
 
     # 3번 게임
     # 파일에서 점수 정보 가져오기
@@ -109,21 +116,24 @@ def ranking_screen():
             
     # DB에서 점수 정보 가져오기
     draw_text("학교를 지켜라(Online)", default_font, screen, 360, 450,  BLACK)
-    conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
-    cursor = conn.cursor()
-    cursor.execute("select * from ranking where gamecode = 3 order by score desc")
-    PyShootingOnlineRankingList = cursor.fetchall()
-    conn.commit()
-    cursor.close()
-    conn.close()
-    if len(PyShootingOnlineRankingList) >= 4:
-        for i in range(0, 4):
-            draw_text(str(PyShootingOnlineRankingList[i][2]), default_font, screen, 390, 480 + (i * 30),  BLACK)
-            draw_text(str(PyShootingOnlineRankingList[i][1]), default_font, screen, 330, 480 + (i * 30),  BLACK)
-    else:
-        for i in range(0, len(PyShootingOnlineRankingList)):
-            draw_text(str(PyShootingOnlineRankingList[i][2]), default_font, screen, 390, 480 + (i * 30),  BLACK)
-            draw_text(str(PyShootingOnlineRankingList[i][1]), default_font, screen, 330, 480 + (i * 30),  BLACK)
+    try:
+        conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
+        cursor = conn.cursor()
+        cursor.execute("select * from ranking where gamecode = 3 order by score desc")
+        PyShootingOnlineRankingList = cursor.fetchall()
+        conn.commit()
+        cursor.close()
+        conn.close()
+        if len(PyShootingOnlineRankingList) >= 4:
+            for i in range(0, 4):
+                draw_text(str(PyShootingOnlineRankingList[i][2]), default_font, screen, 390, 480 + (i * 30),  BLACK)
+                draw_text(str(PyShootingOnlineRankingList[i][1]), default_font, screen, 330, 480 + (i * 30),  BLACK)
+        else:
+            for i in range(0, len(PyShootingOnlineRankingList)):
+                draw_text(str(PyShootingOnlineRankingList[i][2]), default_font, screen, 390, 480 + (i * 30),  BLACK)
+                draw_text(str(PyShootingOnlineRankingList[i][1]), default_font, screen, 330, 480 + (i * 30),  BLACK)
+    except:
+        draw_text("인터넷에 연결할 수 없습니다.", default_font, screen, 360, 480,  BLACK)
 
     pygame.display.update()
 
