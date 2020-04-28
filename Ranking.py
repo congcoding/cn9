@@ -49,6 +49,38 @@ def ranking_screen():
     for i in range(0, 5):
         draw_text(str(PySpaceshipOnlineRankingList[i][0]), default_font, screen, 360, 150 + (i * 30),  BLACK)
 
+    #<PyCar 점수>
+    # 파일에서 점수 정보 가져오기
+    draw_text("수룡이의 레이싱(Local)", default_font, screen, 120, 300,  BLACK)
+    PyCarLocalRankingList = pickle.load(open("./PyCar/PyCarRanking.pic", "rb"))
+    PyCarLocalRankingList.sort(reverse=True)
+    if len(PyCarLocalRankingList) >= 5:
+        for i in range(0, 5):
+            draw_text(str(PyCarLocalRankingList[i]), default_font, screen, 120, 330 + (i * 30),  BLACK)
+    else:
+        for i in range(0, len(PyCarLocalRankingList)):
+            draw_text(str(PyCarLocalRankingList[i]), default_font, screen, 120, 330 + (i * 30),  BLACK)
+
+    # DB에서 점수 정보 가져오기
+    draw_text("수룡이의 레이싱(Online)", default_font, screen, 360, 300,  BLACK)
+    connection = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
+    cursor = connection.cursor()
+    cursor.execute("select * from pycar order by score desc")
+    PyCarOnlineRankingList = cursor.fetchall()
+    connection.commit()
+    cursor.close()
+    connection.close()
+    if len(PyCarOnlineRankingList) >= 5:
+        for i in range(0, 5):
+            draw_text(str(PyCarOnlineRankingList[i][0]), default_font, screen, 360, 330 + (i * 30),  BLACK)
+    else:
+        for i in range(0, len(PyCarOnlineRankingList)):
+            draw_text(str(PyCarOnlineRankingList[i][0]), default_font, screen, 360, 330 + (i * 30),  BLACK)
+
+    #for i in range(0, 5):
+    #    draw_text(str(PyCarOnlineRankingList[i][0]), default_font, screen, 360, 330 + (i * 30),  BLACK)
+
+
     pygame.display.update()
 
     for event in pygame.event.get():
