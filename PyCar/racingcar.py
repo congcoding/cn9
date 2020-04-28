@@ -20,7 +20,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GRAY = (150, 150, 150)
 RED = (255, 0, 0)
-PURPLE = (204, 153, 255)
+MAIN = (239, 218, 255)
 
 class Car:
     image_car = ['./PyCar/RacingCar01.png', './PyCar/RacingCar02.png', './PyCar/RacingCar03.png', './PyCar/RacingCar04.png', './PyCar/RacingCar05.png', \
@@ -67,9 +67,11 @@ def draw_text(text, font, surface, x, y, main_color):
     surface.blit(text_obj, text_rect) 
 
 def draw_main_menu(score):
-    screen.fill(PURPLE)
+    screen.fill(WHITE)
     draw_x = (WINDOW_WIDTH / 2) - 200
     draw_y = WINDOW_HEIGHT / 2
+    image_flag = pygame.image.load('./PyCar/flag.png')
+    screen.blit(image_flag, [0, 0])
     #image_intro = pygame.image.load('./PyCar/PyCar.png')
     image_intro = pygame.image.load('./PyCar/PyCar2.png')
     screen.blit(image_intro, [draw_x + 40, draw_y - 280])
@@ -78,9 +80,9 @@ def draw_main_menu(score):
     #text_title = font_40.render("PyCar: Racing Car Game", True, BLACK)
     #text_title = font_40.render("카레이서 수룡이의 레이싱 게임", True, BLACK)
     #screen.blit(text_title, [draw_x, draw_y])
-    draw_text('카레이서 수룡이의 레이싱 게임!',
-              pygame.font.Font('./PyCar/NanumGothic.ttf', 30), screen,
-              draw_x+200, draw_y, (51, 0, 153))
+    draw_text('카레이서 수룡이의 레이싱!',
+              pygame.font.Font('./PyCar/NanumGothic.ttf', 35), screen,
+              draw_x+200, draw_y+10, BLACK)
     score_text = font_40.render("Score: " + str(score), True, WHITE)
     screen.blit(score_text, [draw_x, draw_y + 70])
     #text_start = font_30.render("Press Space Key to Start!", True, RED)
@@ -88,10 +90,10 @@ def draw_main_menu(score):
     #screen.blit(text_start, [draw_x, draw_y + 100])
     draw_text('시작하려면 스페이스 키를 누르세요',
               pygame.font.Font('./PyCar/NanumGothic.ttf', 20), screen,
-              draw_x+200, draw_y+150, (102, 51, 255))
+              draw_x+200, draw_y+130, (19, 2, 171))
     draw_text('나가려면 0을 누르세요!',
               pygame.font.Font('./PyCar/NanumGothic.ttf', 20), screen,
-              draw_x+200, draw_y+175, (102, 51, 255))
+              draw_x+200, draw_y+155, (19, 2, 171))
     pygame.display.flip()
 
 def draw_score(score):
@@ -102,7 +104,7 @@ def draw_score(score):
 def main_loop():
     pygame.init()
 
-    pygame.display.set_caption("카레이서 수룡이의 레이싱 게임!")
+    pygame.display.set_caption("카레이서 수룡이의 레이싱!")
     clock = pygame.time.Clock()
 
     #게임 사운드
@@ -137,44 +139,12 @@ def main_loop():
         lane_y += lane_height + lane_margin
 
     crash = True
-    game_on = True
+    game_on = True 
     while game_on:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
-                game_on = False
-                
+                game_on = False  
             if crash:
-                f = open("test.txt", 'w')
-                f.write(str(score)+"\n")
-                f.close()
-
-                # 한글 설정
-                os.putenv('NLS_LANG', '.UTF8')
-                
-                #cursor.execute("select * from pycar")
-                #result = cursor.fetchall()
-                #print(result)
-
-                #PyCarRankingList = [0]
-                #with open('PyCarRanking.pic', 'wb') as f:
-                #    pickle.dump(score, f)
-                
-                # pickle을 이용해 파일에 score 저장
-                PyCarRankingList = pickle.load(open("./PyCar/PyCarRanking.pic", "rb"))
-
-                PyCarRankingList.append(score)
-                pickle.dump(PyCarRankingList, open("./PyCar/PyCarRanking.pic", "wb"))
-                # DB 연결
-                connection = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
-                cursor = connection.cursor()
-                # 쿼리 실행
-                cursor.execute("insert into pycar(score) values ('%d')" % (score))
-                # commit
-                connection.commit()
-                # close
-                cursor.close()
-                connection.close()
-                
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_0:
                     import Start
                     Start.main_loop()
@@ -238,6 +208,37 @@ def main_loop():
             #레이싱 카 충돌사고 체크
             for i in range(car_count):
                 if player.check_crash(cars[i]):
+                    #f = open("test.txt", 'w')
+                    #f.write(str(score)+"\n")
+                    #f.close()
+
+                    # 한글 설정
+                    os.putenv('NLS_LANG', '.UTF8')
+                    
+                    #cursor.execute("select * from pycar")
+                    #result = cursor.fetchall()
+                    #print(result)
+
+                    #PyCarRankingList = [0]
+                    #with open('PyCarRanking.pic', 'wb') as f:
+                    #    pickle.dump(score, f)
+                    
+                    # pickle을 이용해 파일에 score 저장
+                    PyCarRankingList = pickle.load(open("./PyCar/PyCarRanking.pic", "rb"))
+                    PyCarRankingList.append(score)
+                    print(PyCarRankingList)
+                    pickle.dump(PyCarRankingList, open("./PyCar/PyCarRanking.pic", "wb"))
+                    # DB 연결
+                    connection = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
+                    cursor = connection.cursor()
+                    # 쿼리 실행
+                    cursor.execute("insert into pycar(score) values ('%d')" % (score))
+                    # commit
+                    connection.commit()
+                    # close
+                    cursor.close()
+                    connection.close()
+                    
                     crash = True
                     pygame.mixer.music.stop()
                     sound_crash.play()
