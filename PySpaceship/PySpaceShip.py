@@ -9,6 +9,9 @@ from time import sleep
 import pygame
 from pygame.locals import *
 
+import tkinter as tk
+from tkinter import simpledialog
+
 WINDOW_WIDTH = 480  #800
 WINDOW_HEIGHT = 600 #600
 
@@ -173,6 +176,11 @@ def game_loop():    #실제 게임 엔진
             explosion_sound.play()      #충돌 사운드 출력
             pygame.mixer.music.stop()   #게임이 끝나기 전에 음악 중단
             rocks.empty()               #전체 암석을 없애고
+
+            ROOT = tk.Tk()
+            ROOT.withdraw()
+            name = simpledialog.askstring(title="", prompt="이름을 입력하세요")
+
             # pickle을 이용해 파일에 score 저장
             try:
                 PySpaceshipRankingList = pickle.load(open("./PySpaceship/PySpaceshipRanking.pic", "rb"))
@@ -184,7 +192,7 @@ def game_loop():    #실제 게임 엔진
             # DB를 이용해 score 저장
             conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
             cursor = conn.cursor()
-            cursor.execute("insert into PYSPACESHIP(score) values ('%d')" % (score))
+            cursor.execute("insert into ranking(gamecode, name, score) values ('%d', '%s', '%d')" % (1, name, score))
             conn.commit()
             cursor.close()
             conn.close()
