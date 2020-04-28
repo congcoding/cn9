@@ -8,12 +8,12 @@ from time import sleep
 
 padWidth = 480
 padHeight = 600
-rockImage = ['./PyShooting/homework2.png'] #'./PyShooting/rock01.png','./PyShooting/rock02.png','./PyShooting/rock03.png','./PyShooting/rock04.png','./PyShooting/rock05.png',\
-             #'./PyShooting/rock06.png','./PyShooting/rock07.png','./PyShooting/rock08.png','./PyShooting/rock09.png','./PyShooting/rock10.png',\
-             #'./PyShooting/rock11.png','./PyShooting/rock12.png','./PyShooting/rock13.png','./PyShooting/rock14.png','./PyShooting/rock15.png',\
-             #'./PyShooting/rock16.png','./PyShooting/rock17.png','./PyShooting/rock18.png','./PyShooting/rock19.png','./PyShooting/rock20.png',\
-             #'./PyShooting/rock21.png','./PyShooting/rock22.png','./PyShooting/rock23.png','./PyShooting/rock24.png','./PyShooting/rock25.png',\
-             #'./PyShooting/rock26.png','./PyShooting/rock27.png','./PyShooting/rock28.png','./PyShooting/rock29.png','./PyShooting/rock30.png']
+rockImage = ['./PyShooting/rock01.png','./PyShooting/rock02.png','./PyShooting/rock03.png','./PyShooting/rock04.png','./PyShooting/rock05.png',\
+             './PyShooting/rock06.png','./PyShooting/rock07.png','./PyShooting/rock08.png','./PyShooting/rock09.png','./PyShooting/rock10.png',\
+             './PyShooting/rock11.png','./PyShooting/rock12.png','./PyShooting/rock13.png','./PyShooting/rock14.png','./PyShooting/rock15.png',\
+             './PyShooting/rock16.png','./PyShooting/rock17.png','./PyShooting/rock18.png','./PyShooting/rock19.png','./PyShooting/rock20.png',\
+             './PyShooting/rock21.png','./PyShooting/rock22.png','./PyShooting/rock23.png','./PyShooting/rock24.png','./PyShooting/rock25.png',\
+             './PyShooting/rock26.png','./PyShooting/rock27.png','./PyShooting/rock28.png','./PyShooting/rock29.png','./PyShooting/rock30.png']
 explosionSound = ['./PyShooting/explosion01.wav','./PyShooting/explosion02.wav','./PyShooting/explosion03.wav','./PyShooting/explosion04.wav']
 
 
@@ -44,7 +44,10 @@ def writeMessage(text, count):
     
     # 랭킹 부분
     # pickle을 이용해 파일에 score 저장
-    PyShootingRankingList = pickle.load(open("./PyShooting/PyShootingRanking.pic", "rb"))
+    try: 
+        PyShootingRankingList = pickle.load(open("./PyShooting/PyShootingRanking.pic", "rb"))
+    except:
+         PyShootingRankingList = []
     PyShootingRankingList.append(count)
     pickle.dump(PyShootingRankingList, open("./PyShooting/PyShootingRanking.pic", "wb"))
     print("저장1", count)
@@ -97,7 +100,7 @@ def initGame():
     global gamePad, clock, background, fighter, missile, explosion, missileSound, gameOverSound
     pygame.init()
     gamePad = pygame.display.set_mode((padWidth, padHeight))
-    pygame.display.set_caption('PyShooting')
+    pygame.display.set_caption('학교를 지켜라')
     background = pygame.image.load('./PyShooting/untitled.png') # 배경
     fighter = pygame.image.load('./PyShooting/fighter.png')
     missile = pygame.image.load('./PyShooting/missile.png')

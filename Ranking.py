@@ -85,31 +85,45 @@ def ranking_screen():
     connection.close()
     if len(PyCarOnlineRankingList) >= 4:
         for i in range(0, 4):
-            draw_text(str(PyCarOnlineRankingList[i][2]), default_font, screen, 380, 330 + (i * 30),  BLACK)
+            draw_text(str(PyCarOnlineRankingList[i][2]), default_font, screen, 390, 330 + (i * 30),  BLACK)
             draw_text(str(PyCarOnlineRankingList[i][1]), default_font, screen, 330, 330 + (i * 30),  BLACK)
     else:
         for i in range(0, len(PyCarOnlineRankingList)):
-            draw_text(str(PyCarOnlineRankingList[i][2]), default_font, screen, 380, 330 + (i * 30),  BLACK)
+            draw_text(str(PyCarOnlineRankingList[i][2]), default_font, screen, 390, 330 + (i * 30),  BLACK)
             draw_text(str(PyCarOnlineRankingList[i][1]), default_font, screen, 330, 330 + (i * 30),  BLACK)
 
     # 3번 게임
     # 파일에서 점수 정보 가져오기
-    draw_text("PyShooting(Local)", default_font, screen, 120, 480,  BLACK)
-    PyShootingLocalRankingList = pickle.load(open("./PyShooting/PyShootingRanking.pic", "rb"))
+    draw_text("학교를 지켜라(Local)", default_font, screen, 120, 450,  BLACK)
+    try:
+        PyShootingLocalRankingList = pickle.load(open("./PyShooting/PyShootingRanking.pic", "rb"))
+    except:
+         PyShootingLocalRankingList = []
     PyShootingLocalRankingList.sort(reverse=True)
-    for i in range(0, 5):
-        draw_text(str(PyShootingLocalRankingList[i]), default_font, screen, 120, 500 + (i * 30),  BLACK)
+    if len(PyShootingLocalRankingList) >= 4:
+        for i in range(0, 4):
+            draw_text(str(PyShootingLocalRankingList[i]), default_font, screen, 120, 480 + (i * 30),  BLACK)
+    else:
+        for i in range(0, len(PyShootingLocalRankingList)):
+            draw_text(str(PyShootingLocalRankingList[i]), default_font, screen, 120, 480 + (i * 30),  BLACK)
+            
     # DB에서 점수 정보 가져오기
-    draw_text("PyShooting(Online)", default_font, screen, 360, 480,  BLACK)
+    draw_text("학교를 지켜라(Online)", default_font, screen, 360, 450,  BLACK)
     conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
     cursor = conn.cursor()
-    cursor.execute("select * from pyshooting order by score desc")
+    cursor.execute("select * from ranking where gamecode = 3 order by score desc")
     PyShootingOnlineRankingList = cursor.fetchall()
     conn.commit()
     cursor.close()
     conn.close()
-    for i in range(0, 5):
-        draw_text(str(PyShootingOnlineRankingList[i][0]), default_font, screen, 360, 500 + (i * 30),  BLACK)
+    if len(PyShootingOnlineRankingList) >= 4:
+        for i in range(0, 4):
+            draw_text(str(PyShootingOnlineRankingList[i][2]), default_font, screen, 390, 480 + (i * 30),  BLACK)
+            draw_text(str(PyShootingOnlineRankingList[i][1]), default_font, screen, 330, 480 + (i * 30),  BLACK)
+    else:
+        for i in range(0, len(PyShootingOnlineRankingList)):
+            draw_text(str(PyShootingOnlineRankingList[i][2]), default_font, screen, 390, 480 + (i * 30),  BLACK)
+            draw_text(str(PyShootingOnlineRankingList[i][1]), default_font, screen, 330, 480 + (i * 30),  BLACK)
 
     pygame.display.update()
 
