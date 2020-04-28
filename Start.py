@@ -19,7 +19,6 @@ screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
 
 default_font = pygame.font.Font('./PySpaceship/NanumGothic.ttf', 28)
 
-
 def draw_text(text, font, surface, x, y, main_color):
     text_obj = font.render(text, True, main_color)
     text_rect = text_obj.get_rect()
@@ -31,14 +30,8 @@ def main_screen():
     pygame.mouse.set_visible(True)
 
     start_image = pygame.image.load('main.png')
+    pygame.display.set_caption('수룡 게임 천국')
     screen.blit(start_image, [0, 0])
-
-    # draw_text('게임 1', default_font, 
-    #            screen, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 1.5, WHITE)
-    # draw_text('게임 2', default_font, 
-    #            screen, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2.0, WHITE)
-    # draw_text('게임 3', default_font, 
-    #            screen, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2.5, WHITE)
 
     pygame.display.update()
 
