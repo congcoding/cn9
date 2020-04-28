@@ -175,8 +175,10 @@ def game_loop():    #실제 게임 엔진
             pygame.mixer.music.stop()   #게임이 끝나기 전에 음악 중단
             rocks.empty()               #전체 암석을 없애고
             # pickle을 이용해 파일에 score 저장
-            PySpaceshipRankingList = pickle.load(open("./PySpaceship/PySpaceshipRanking.pic", "rb"))
-            # print("before", PySpaceshipRankingList)
+            try:
+                PySpaceshipRankingList = pickle.load(open("./PySpaceship/PySpaceshipRanking.pic", "rb"))
+            except:
+                PySpaceshipRankingList = []
             PySpaceshipRankingList.append(score)
             pickle.dump(PySpaceshipRankingList, open("./PySpaceship/PySpaceshipRanking.pic", "wb"))
             # print("after", PySpaceshipRankingList)
