@@ -19,7 +19,6 @@ BLUE = (20, 20, 250)
 
 pygame.init()
 screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
-pygame.display.set_caption('PySpaceShip : 우주 암석 피하기 게임')
 pygame.display.set_icon(pygame.image.load('./PySpaceShip/icon.jpg'))
 fps_clock = pygame.time.Clock()
 FPS = 60
@@ -225,11 +224,12 @@ def game_loop():    #실제 게임 엔진
 def game_screen():
     global score
     pygame.mouse.set_visible(True)
+    pygame.display.set_caption('우주에서 살아남기')
 
     start_image = pygame.image.load('./PySpaceShip/game_screen.png')
     screen.blit(start_image, [0, 0])
 
-    draw_text('우주 암석 피하기',
+    draw_text('우주에서 살아남기',
               pygame.font.Font('./PySpaceShip/NanumGothic.ttf', 50), screen,
               WINDOW_WIDTH / 2, 100, (255, 255, 255))
     draw_text('마우스를 움직여서 수룡이가 암석을 피할 수 있게 도와주세요!',
