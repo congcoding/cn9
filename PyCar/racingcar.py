@@ -226,7 +226,6 @@ def main_loop():
                     # pickle을 이용해 파일에 score 저장
                     PyCarRankingList = pickle.load(open("./PyCar/PyCarRanking.pic", "rb"))
                     PyCarRankingList.append(score)
-                    print(PyCarRankingList)
                     pickle.dump(PyCarRankingList, open("./PyCar/PyCarRanking.pic", "wb"))
                     # DB 연결
                     connection = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
