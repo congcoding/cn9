@@ -32,7 +32,7 @@ def ranking_screen():
     screen.blit(start_image, [0, 0])
 
     # 파일에서 점수 정보 가져오기
-    draw_text("암석 피하기(Local)", default_font, screen, 120, 130,  BLACK)
+    draw_text("암석 피하기(Local)", default_font, screen, 120, 150,  BLACK)
     try:
         PySpaceshipLocalRankingList = pickle.load(open("./PySpaceship/PySpaceshipRanking.pic", "rb"))
     except:
@@ -42,9 +42,9 @@ def ranking_screen():
     if length > 4:
         length = 4
     for i in range(0, length):
-        draw_text(str(PySpaceshipLocalRankingList[i]), default_font, screen, 120, 150 + (i * 30),  BLACK)
+        draw_text(str(PySpaceshipLocalRankingList[i]), default_font, screen, 120, 170 + (i * 30),  BLACK)
     # DB에서 점수 정보 가져오기
-    draw_text("암석 피하기(Online)", default_font, screen, 360, 130,  BLACK)
+    draw_text("암석 피하기(Online)", default_font, screen, 360, 150,  BLACK)
     conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
     cursor = conn.cursor()
     cursor.execute("select * from pyspaceship order by score desc")
@@ -56,7 +56,7 @@ def ranking_screen():
     if length > 4:
         length = 4
     for i in range(0, length):
-        draw_text(str(PySpaceshipOnlineRankingList[i][0]), default_font, screen, 360, 150 + (i * 30),  BLACK)
+        draw_text(str(PySpaceshipOnlineRankingList[i][0]), default_font, screen, 360, 170 + (i * 30),  BLACK)
 
     #<PyCar 점수>
     # 파일에서 점수 정보 가져오기
