@@ -61,10 +61,13 @@ def ranking_screen():
     #<PyCar 점수>
     # 파일에서 점수 정보 가져오기
     draw_text("수룡이의 레이싱(Local)", default_font, screen, 120, 300,  BLACK)
-    PyCarLocalRankingList = pickle.load(open("./PyCar/PyCarRanking.pic", "rb"))
+    try:
+        PyCarLocalRankingList = pickle.load(open("./PyCar/PyCarRanking.pic", "rb"))
+    except:
+        PyCarLocalRankingList = []            
     PyCarLocalRankingList.sort(reverse=True)
-    if len(PyCarLocalRankingList) >= 5:
-        for i in range(0, 5):
+    if len(PyCarLocalRankingList) >= 4:
+        for i in range(0, 4):
             draw_text(str(PyCarLocalRankingList[i]), default_font, screen, 120, 330 + (i * 30),  BLACK)
     else:
         for i in range(0, len(PyCarLocalRankingList)):
@@ -79,16 +82,31 @@ def ranking_screen():
     connection.commit()
     cursor.close()
     connection.close()
-    if len(PyCarOnlineRankingList) >= 5:
-        for i in range(0, 5):
+    if len(PyCarOnlineRankingList) >= 4:
+        for i in range(0, 4):
             draw_text(str(PyCarOnlineRankingList[i][0]), default_font, screen, 360, 330 + (i * 30),  BLACK)
     else:
         for i in range(0, len(PyCarOnlineRankingList)):
             draw_text(str(PyCarOnlineRankingList[i][0]), default_font, screen, 360, 330 + (i * 30),  BLACK)
 
-    #for i in range(0, 5):
-    #    draw_text(str(PyCarOnlineRankingList[i][0]), default_font, screen, 360, 330 + (i * 30),  BLACK)
-
+    # 3번 게임
+    # 파일에서 점수 정보 가져오기
+    draw_text("PyShooting(Local)", default_font, screen, 120, 480,  BLACK)
+    PyShootingLocalRankingList = pickle.load(open("./PyShooting/PyShootingRanking.pic", "rb"))
+    PyShootingLocalRankingList.sort(reverse=True)
+    for i in range(0, 5):
+        draw_text(str(PyShootingLocalRankingList[i]), default_font, screen, 120, 500 + (i * 30),  BLACK)
+    # DB에서 점수 정보 가져오기
+    draw_text("PyShooting(Online)", default_font, screen, 360, 480,  BLACK)
+    conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
+    cursor = conn.cursor()
+    cursor.execute("select * from pyshooting order by score desc")
+    PyShootingOnlineRankingList = cursor.fetchall()
+    conn.commit()
+    cursor.close()
+    conn.close()
+    for i in range(0, 5):
+        draw_text(str(PyShootingOnlineRankingList[i][0]), default_font, screen, 360, 500 + (i * 30),  BLACK)
 
     pygame.display.update()
 
