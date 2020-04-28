@@ -84,11 +84,11 @@ def ranking_screen():
     connection.close()
     if len(PyCarOnlineRankingList) >= 4:
         for i in range(0, 4):
-            draw_text(str(PyCarOnlineRankingList[i][2]), default_font, screen, 380, 330 + (i * 30),  BLACK)
+            draw_text(str(PyCarOnlineRankingList[i][2]), default_font, screen, 390, 330 + (i * 30),  BLACK)
             draw_text(str(PyCarOnlineRankingList[i][1]), default_font, screen, 330, 330 + (i * 30),  BLACK)
     else:
         for i in range(0, len(PyCarOnlineRankingList)):
-            draw_text(str(PyCarOnlineRankingList[i][2]), default_font, screen, 380, 330 + (i * 30),  BLACK)
+            draw_text(str(PyCarOnlineRankingList[i][2]), default_font, screen, 390, 330 + (i * 30),  BLACK)
             draw_text(str(PyCarOnlineRankingList[i][1]), default_font, screen, 330, 330 + (i * 30),  BLACK)
 
     # 3번 게임
