@@ -1,17 +1,19 @@
 import pygame
 import sys
 import random
+import pickle
+import cx_Oracle
 from time import sleep
 
 
 padWidth = 480
 padHeight = 600
-rockImage = ['./PyShooting/rock01.png','./PyShooting/rock02.png','./PyShooting/rock03.png','./PyShooting/rock04.png','./PyShooting/rock05.png',\
-             './PyShooting/rock06.png','./PyShooting/rock07.png','./PyShooting/rock08.png','./PyShooting/rock09.png','./PyShooting/rock10.png',\
-             './PyShooting/rock11.png','./PyShooting/rock12.png','./PyShooting/rock13.png','./PyShooting/rock14.png','./PyShooting/rock15.png',\
-             './PyShooting/rock16.png','./PyShooting/rock17.png','./PyShooting/rock18.png','./PyShooting/rock19.png','./PyShooting/rock20.png',\
-             './PyShooting/rock21.png','./PyShooting/rock22.png','./PyShooting/rock23.png','./PyShooting/rock24.png','./PyShooting/rock25.png',\
-             './PyShooting/rock26.png','./PyShooting/rock27.png','./PyShooting/rock28.png','./PyShooting/rock29.png','./PyShooting/rock30.png']
+rockImage = ['./PyShooting/homework2.png'] #'./PyShooting/rock01.png','./PyShooting/rock02.png','./PyShooting/rock03.png','./PyShooting/rock04.png','./PyShooting/rock05.png',\
+             #'./PyShooting/rock06.png','./PyShooting/rock07.png','./PyShooting/rock08.png','./PyShooting/rock09.png','./PyShooting/rock10.png',\
+             #'./PyShooting/rock11.png','./PyShooting/rock12.png','./PyShooting/rock13.png','./PyShooting/rock14.png','./PyShooting/rock15.png',\
+             #'./PyShooting/rock16.png','./PyShooting/rock17.png','./PyShooting/rock18.png','./PyShooting/rock19.png','./PyShooting/rock20.png',\
+             #'./PyShooting/rock21.png','./PyShooting/rock22.png','./PyShooting/rock23.png','./PyShooting/rock24.png','./PyShooting/rock25.png',\
+             #'./PyShooting/rock26.png','./PyShooting/rock27.png','./PyShooting/rock28.png','./PyShooting/rock29.png','./PyShooting/rock30.png']
 explosionSound = ['./PyShooting/explosion01.wav','./PyShooting/explosion02.wav','./PyShooting/explosion03.wav','./PyShooting/explosion04.wav']
 
 
@@ -39,6 +41,20 @@ def writeMenu():
 
 def writeMessage(text):
     global gamePad, gameOverSound
+    
+    # 랭킹 부분
+    # pickle을 이용해 파일에 score 저장
+    PyShootingRankingList = pickle.load(open("./PyShooting/PyShootingRanking.pic", "rb"))
+    PyShootingRankingList.append(shotCount)
+    pickle.dump(PyShootingRankingList, open("./PyShooting/PyShootingRanking.pic", "wb"))
+    # DB를 이용해 score 저장
+    conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
+    cursor = conn.cursor()
+    cursor.execute("insert into PYSPACESHIP(score) values ('%d')" % (score))
+    conn.commit()
+    cursor.close()
+    conn.close()
+    
     textfont = pygame.font.Font('./PyShooting/NanumGothic.ttf', 15)
     text = textfont.render(text, True, (255, 0, 0))
     textpos = text.get_rect()
@@ -80,7 +96,7 @@ def initGame():
     pygame.init()
     gamePad = pygame.display.set_mode((padWidth, padHeight))
     pygame.display.set_caption('PyShooting')
-    background = pygame.image.load('./PyShooting/background.png')
+    background = pygame.image.load('./PyShooting/untitled.png') # 배경
     fighter = pygame.image.load('./PyShooting/fighter.png')
     missile = pygame.image.load('./PyShooting/missile.png')
     explosion = pygame.image.load('./PyShooting/explosion.png')
