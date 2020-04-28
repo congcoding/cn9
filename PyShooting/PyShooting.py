@@ -44,7 +44,10 @@ def writeMessage(text, count):
     
     # 랭킹 부분
     # pickle을 이용해 파일에 score 저장
-    PyShootingRankingList = pickle.load(open("./PyShooting/PyShootingRanking.pic", "rb"))
+    try: 
+        PyShootingRankingList = pickle.load(open("./PyShooting/PyShootingRanking.pic", "rb"))
+    except:
+         PyShootingRankingList = []
     PyShootingRankingList.append(count)
     pickle.dump(PyShootingRankingList, open("./PyShooting/PyShootingRanking.pic", "wb"))
     print("저장1", count)
