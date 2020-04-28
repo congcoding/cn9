@@ -1,3 +1,5 @@
+#-*- encoding: utf-8 -*-
+
 import gettext
 import math
 import random
@@ -6,11 +8,14 @@ import cx_Oracle
 import sys
 from time import sleep
 
+import os
+os.putenv('NLS_LANG', '.UTF8')
+
 import pygame
 from pygame.locals import *
 
-import tkinter as tk
-from tkinter import simpledialog
+from tkinter import *
+from tkinter import messagebox
 
 WINDOW_WIDTH = 480  #800
 WINDOW_HEIGHT = 600 #600
@@ -177,9 +182,39 @@ def game_loop():    #실제 게임 엔진
             pygame.mixer.music.stop()   #게임이 끝나기 전에 음악 중단
             rocks.empty()               #전체 암석을 없애고
 
-            ROOT = tk.Tk()
-            ROOT.withdraw()
-            name = simpledialog.askstring(title="", prompt="이름을 입력하세요")
+            # name 입력하는 부분
+            root = Tk()
+
+            # 버튼 클릭 이벤트 핸들러
+            def okClick():
+                name = txt.get()
+                if len(name)==0:
+                    messagebox.showinfo("완료", "이름 없이 저장되었습니다")
+                    name = "익명"
+                else:
+                    messagebox.showinfo("완료", "저장되었습니다")
+                
+                # DB를 이용해 score 저장
+                conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
+                cursor = conn.cursor()
+                cursor.execute("insert into ranking(gamecode, name, score) values ('%d', '%s', '%d')" % (1, name[:5], score))
+                conn.commit()
+                cursor.close()
+                conn.close()
+
+                root.destroy()
+
+            root.title('이름 입력') # 타이틀
+            root.geometry('230x60+190+350')
+            
+            lbl = Label(root, text="이름(최대 5글자)")
+            lbl.grid(row=0, column=0)
+            txt = Entry(root)
+            txt.grid(row=0, column=1)
+            btn = Button(root, text="OK", width=15, command=okClick)
+            btn.grid(row=1, column=1)
+            
+            root.mainloop()
 
             # pickle을 이용해 파일에 score 저장
             try:
@@ -188,14 +223,6 @@ def game_loop():    #실제 게임 엔진
                 PySpaceshipRankingList = []
             PySpaceshipRankingList.append(score)
             pickle.dump(PySpaceshipRankingList, open("./PySpaceship/PySpaceshipRanking.pic", "wb"))
-            # print("after", PySpaceshipRankingList)
-            # DB를 이용해 score 저장
-            conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
-            cursor = conn.cursor()
-            cursor.execute("insert into ranking(gamecode, name, score) values ('%d', '%s', '%d')" % (1, name, score))
-            conn.commit()
-            cursor.close()
-            conn.close()
             return 'game_screen'        #game_screen으로 돌아감
         elif warp: #워프에 우주선이 닿으면 아이템 획득의 의미
             warp_count += 1  #워프의 개수를 증가시키고      
