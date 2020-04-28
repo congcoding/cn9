@@ -1,8 +1,6 @@
 import pygame
 import sys
 import random
-#import Start
-#from PyCar import racingcar
 from time import sleep
 
 
@@ -17,11 +15,12 @@ rockImage = ['./PyShooting/rock01.png','./PyShooting/rock02.png','./PyShooting/r
 explosionSound = ['./PyShooting/explosion01.wav','./PyShooting/explosion02.wav','./PyShooting/explosion03.wav','./PyShooting/explosion04.wav']
 
 
+
     
 def writeScore(count):
     global gamePad
     font = pygame.font.Font('./PyShooting/NanumGothic.ttf', 20)
-    text = font.render('파괴한 운석:' + str(count) + '/100', True, (255, 255, 255))
+    text = font.render('파괴한 운석:' + str(count), True, (255, 255, 255))
     gamePad.blit(text, (10, 0))
 
 
@@ -31,36 +30,45 @@ def writePassed(count):
     text = font.render('놓친 운석:' + str(count) + '/3', True, (255, 0, 0))
     gamePad.blit(text, (360, 0))
 
+def writeMenu():
+    global gamePad
+    font = pygame.font.Font('./PyShooting/NanumGothic.ttf', 15)
+    text = font.render('메인으로 "0" 다시 시작하기 "1"', True, (100, 100, 100))
+    gamePad.blit(text, (10, 25))
+
 
 def writeMessage(text):
     global gamePad, gameOverSound
-    textfont = pygame.font.Font('./PyShooting/NanumGothic.ttf', 80)
+    textfont = pygame.font.Font('./PyShooting/NanumGothic.ttf', 15)
     text = textfont.render(text, True, (255, 0, 0))
     textpos = text.get_rect()
-    textpos.center = (padWidth/2, padHeight/2)
+    textpos.center = (padWidth / 2, padHeight / 2)
     gamePad.blit(text, textpos)
     pygame.display.update()
-    #pygame.mixer.music.stop()
-    #gameOverSound.play()
-    #sleep(2)
-    pygame.mixer.music.play(-1)
-    #텍스트 출력 : 다시 하려면 1,메인으로 돌아가려면 0을 누르세요
-    for event in pygame.event.get():
-            if event.type in [pygame.KEYDOWN]:
-                if event.key == pygame.K_0:
-                    import Start
-                    Start.main_loop()
-                elif event.key == pygame.K_1:
-                    runGame()
+    pygame.mixer.music.stop()
+    gameOverSound.play()
+    sleep(1)
+    while True:
+        event = pygame.event.wait()
+        if event.type in [pygame.QUIT]:
+            pygame.quit()
+            sys.exit()
+        if event.type in [pygame.KEYDOWN]:
+            if event.key == pygame.K_0:
+                import Start
+                Start.main_loop()
+            elif event.key == pygame.K_1:
+                pygame.mixer.music.play(-1)
+                runGame()
 
 
 def crash():
     global gamePad
-    writeMessage('전투기 파괴!')
+    writeMessage('전투기 파괴! 메인으로 "0" 다시 시작하기 "1"')
 
 def gameOver():
     global gamePad
-    writeMessage('게임 오버!')
+    writeMessage('게임 오버! 메인으로 "0" 다시 시작하기 "1"')
 
 def drawObject(obj, x, y):
     global gamePad
@@ -129,7 +137,16 @@ def runGame():
                     missileX = x + fighterWidth/2
                     missileY = y - fighterHeight
                     missileXY.append([missileX, missileY])
-                    
+
+                if event.key == pygame.K_0: # 실행은 잘 되는데 쉘에 오류 뜸
+                    pygame.mixer.music.stop()
+                    import Start
+                    Start.main_loop()
+
+                elif event.key == pygame.K_1:
+                    pygame.mixer.music.play(-1)
+                    runGame()
+
             if event.type in [pygame.KEYUP]:
                 if event.key == pygame.K_LEFT or event.key == pygame.K_RIGHT:
                     fighterX = 0
@@ -144,7 +161,7 @@ def runGame():
 
         #운석과 충돌
         if y < rockY + rockHeight:
-            if(rockX > x and rockX < x + fighterWidth) or (rockX + rockWidth > x and rockWidth + rockWidth <  x + fighterWidth):
+            if(rockX > x and rockX < x + fighterWidth) or (rockX + rockWidth > x and rockX + rockWidth <  x + fighterWidth):
                 crash()
 
         drawObject(fighter, x, y)
@@ -152,7 +169,7 @@ def runGame():
         if len(missileXY) !=0:
             for i, bxy in enumerate(missileXY):
                 bxy[1] -= 10
-                missileXY[i][1] == bxy[1]
+                missileXY[i][1] = bxy[1]
 
                 if bxy[1] < rockY:
                     if bxy[0] > rockX and bxy[0] < rockX + rockWidth:
@@ -170,6 +187,7 @@ def runGame():
             for bx, by in missileXY:
                 drawObject(missile, bx, by)
 
+        writeMenu()
         writeScore(shotCount)
 
 
