@@ -54,8 +54,13 @@ def ranking_screen():
     draw_text("수룡이의 레이싱(Local)", default_font, screen, 120, 300,  BLACK)
     PyCarLocalRankingList = pickle.load(open("./PyCar/PyCarRanking.pic", "rb"))
     PyCarLocalRankingList.sort(reverse=True)
-    for i in range(0, 5):
-        draw_text(str(PyCarLocalRankingList[i]), default_font, screen, 120, 330 + (i * 30),  BLACK)
+    if len(PyCarLocalRankingList) >= 5:
+        for i in range(0, 5):
+            draw_text(str(PyCarLocalRankingList[i]), default_font, screen, 120, 330 + (i * 30),  BLACK)
+    else:
+        for i in range(0, len(PyCarLocalRankingList)):
+            draw_text(str(PyCarLocalRankingList[i]), default_font, screen, 120, 330 + (i * 30),  BLACK)
+
     # DB에서 점수 정보 가져오기
     draw_text("수룡이의 레이싱(Online)", default_font, screen, 360, 300,  BLACK)
     connection = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
@@ -65,8 +70,15 @@ def ranking_screen():
     connection.commit()
     cursor.close()
     connection.close()
-    for i in range(0, 5):
-        draw_text(str(PyCarOnlineRankingList[i][0]), default_font, screen, 360, 330 + (i * 30),  BLACK)
+    if len(PyCarOnlineRankingList) >= 5:
+        for i in range(0, 5):
+            draw_text(str(PyCarOnlineRankingList[i][0]), default_font, screen, 360, 330 + (i * 30),  BLACK)
+    else:
+        for i in range(0, len(PyCarOnlineRankingList)):
+            draw_text(str(PyCarOnlineRankingList[i][0]), default_font, screen, 360, 330 + (i * 30),  BLACK)
+
+    #for i in range(0, 5):
+    #    draw_text(str(PyCarOnlineRankingList[i][0]), default_font, screen, 360, 330 + (i * 30),  BLACK)
 
 
     pygame.display.update()
