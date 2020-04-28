@@ -77,17 +77,19 @@ def ranking_screen():
     draw_text("수룡이의 레이싱(Online)", default_font, screen, 360, 300,  BLACK)
     connection = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
     cursor = connection.cursor()
-    cursor.execute("select * from pycar order by score desc")
+    cursor.execute("select * from ranking where gamecode = 2 order by score desc")
     PyCarOnlineRankingList = cursor.fetchall()
     connection.commit()
     cursor.close()
     connection.close()
     if len(PyCarOnlineRankingList) >= 4:
         for i in range(0, 4):
-            draw_text(str(PyCarOnlineRankingList[i][0]), default_font, screen, 360, 330 + (i * 30),  BLACK)
+            draw_text(str(PyCarOnlineRankingList[i][2]), default_font, screen, 380, 330 + (i * 30),  BLACK)
+            draw_text(str(PyCarOnlineRankingList[i][1]), default_font, screen, 330, 330 + (i * 30),  BLACK)
     else:
         for i in range(0, len(PyCarOnlineRankingList)):
-            draw_text(str(PyCarOnlineRankingList[i][0]), default_font, screen, 360, 330 + (i * 30),  BLACK)
+            draw_text(str(PyCarOnlineRankingList[i][2]), default_font, screen, 380, 330 + (i * 30),  BLACK)
+            draw_text(str(PyCarOnlineRankingList[i][1]), default_font, screen, 330, 330 + (i * 30),  BLACK)
 
     # 3번 게임
     # 파일에서 점수 정보 가져오기
