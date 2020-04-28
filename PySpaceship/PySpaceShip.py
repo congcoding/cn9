@@ -188,20 +188,22 @@ def game_loop():    #실제 게임 엔진
             # 버튼 클릭 이벤트 핸들러
             def okClick():
                 name = txt.get()
-                if len(name)==0:
-                    messagebox.showinfo("완료", "이름 없이 저장되었습니다")
-                    name = "익명"
-                else:
-                    messagebox.showinfo("완료", "저장되었습니다")
+                try:
+                    # DB를 이용해 score 저장
+                    conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
+                    cursor = conn.cursor()
+                    if len(name)==0:
+                        messagebox.showinfo("완료", "이름 없이 저장되었습니다")
+                        name = "익명"
+                    else:
+                        messagebox.showinfo("완료", "저장되었습니다")
+                    cursor.execute("insert into ranking(gamecode, name, score) values ('%d', '%s', '%d')" % (1, name[:5], score))
+                    conn.commit()
+                    cursor.close()
+                    conn.close()
+                except:
+                    messagebox.showerror("경고", "인터넷에 연결되어 있지 않아 로컬에만 저장되었습니다.")
                 
-                # DB를 이용해 score 저장
-                conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
-                cursor = conn.cursor()
-                cursor.execute("insert into ranking(gamecode, name, score) values ('%d', '%s', '%d')" % (1, name[:5], score))
-                conn.commit()
-                cursor.close()
-                conn.close()
-
                 root.destroy()
 
             root.title('이름 입력') # 타이틀
