@@ -50,9 +50,7 @@ def writeMessage(text, count):
          PyShootingRankingList = []
     PyShootingRankingList.append(count)
     pickle.dump(PyShootingRankingList, open("./PyShooting/PyShootingRanking.pic", "wb"))
-    print("저장1", count)
     # DB를 이용해 score 저장
-    print("저장2", count)
     conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
     cursor = conn.cursor()
     cursor.execute("insert into PYSPACESHIP(score) values ('%d')" % (count))
