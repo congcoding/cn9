@@ -21,17 +21,22 @@ explosionSound = ['./PyShooting/explosion01.wav','./PyShooting/explosion02.wav',
     
 def writeScore(count):
     global gamePad
-        
-    conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
-    cursor = conn.cursor()
-    cursor.execute("select * from ranking where gamecode = 3 order by score desc")
-    PyShootingOnlineRankingList = cursor.fetchall()
-    conn.commit()
-    cursor.close()
-    conn.close()
+
+    try:
+        conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
+        cursor = conn.cursor()
+        cursor.execute("select * from ranking where gamecode = 3 order by score desc")
+        PyShootingOnlineRankingList = cursor.fetchall()
+        conn.commit()
+        cursor.close()
+        conn.close()
+        top = str(PyShootingOnlineRankingList[0][2])
+    except:
+        top = '기록 없음'
+
 
     font = pygame.font.Font('./PyShooting/NanumGothic.ttf', 20)
-    text = font.render('파괴한 운석:' + str(count) + '/' + str(PyShootingOnlineRankingList[0][2]) + '(현재 최고 기록)', True, (255, 255, 255))
+    text = font.render('파괴한 운석:' + str(count) + '/' + top + '(현재 최고 기록)', True, (255, 255, 255))
     gamePad.blit(text, (10, 0))
 
 
