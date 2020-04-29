@@ -4,6 +4,10 @@ import random
 import pickle
 import cx_Oracle
 from time import sleep
+import os
+os.putenv('NLS_LANG', '.UTF8')
+from tkinter import *
+from tkinter import messagebox
 
 
 padWidth = 480
@@ -21,8 +25,23 @@ explosionSound = ['./PyShooting/explosion01.wav','./PyShooting/explosion02.wav',
     
 def writeScore(count):
     global gamePad
+    # 최고 기록 출력
+    """
+    try:
+        conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
+        cursor = conn.cursor()
+        cursor.execute("select * from ranking where gamecode = 3 order by score desc")
+        PyShootingOnlineRankingList = cursor.fetchall()
+        conn.commit()
+        cursor.close()
+        conn.close()
+        top = str(PyShootingOnlineRankingList[0][2])
+    except:
+        top = '0'
+    """
+    
     font = pygame.font.Font('./PyShooting/NanumGothic.ttf', 20)
-    text = font.render('파괴한 운석:' + str(count), True, (255, 255, 255))
+    text = font.render('파괴한 운석:' + str(count) + '/' + '(현재 최고 기록)', True, (255, 255, 255))
     gamePad.blit(text, (10, 0))
 
 
@@ -41,23 +60,8 @@ def writeMenu():
 
 def writeMessage(text, count):
     global gamePad, gameOverSound
-    
-    # 랭킹 부분
-    # pickle을 이용해 파일에 score 저장
-    try: 
-        PyShootingRankingList = pickle.load(open("./PyShooting/PyShootingRanking.pic", "rb"))
-    except:
-         PyShootingRankingList = []
-    PyShootingRankingList.append(count)
-    pickle.dump(PyShootingRankingList, open("./PyShooting/PyShootingRanking.pic", "wb"))
-    # DB를 이용해 score 저장
-    conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
-    cursor = conn.cursor()
-    cursor.execute("insert into PYSPACESHIP(score) values ('%d')" % (count))
-    conn.commit()
-    cursor.close()
-    conn.close()
-    
+
+    # 게임 끝 메시지 출력
     textfont = pygame.font.Font('./PyShooting/NanumGothic.ttf', 15)
     text = textfont.render(text, True, (255, 0, 0))
     textpos = text.get_rect()
@@ -67,6 +71,60 @@ def writeMessage(text, count):
     pygame.mixer.music.stop()
     gameOverSound.play()
     sleep(1)
+
+
+def ranking(count): # 랭킹 등록 함수
+    # DB에 등록 (name 입력하는 부분)
+    root = Tk()
+    
+    # 버튼 클릭 이벤트 핸들러
+    def okClick():
+        name = txt.get()
+        try:
+            # DB를 이용해 score 저장
+            conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
+            cursor = conn.cursor()
+            if len(name)==0:
+                messagebox.showinfo("완료", "이름 없이 저장되었습니다")
+                name = "익명"
+            else:
+                messagebox.showinfo("완료", "저장되었습니다")
+            cursor.execute("insert into ranking(gamecode, name, score) values ('%d', '%s', '%d')" % (3, name[:5], count))
+            conn.commit()
+            cursor.close()
+            conn.close()
+        except:
+            messagebox.showerror("경고", "인터넷에 연결되어 있지 않아 로컬에만 저장되었습니다.")
+
+        root.destroy()
+
+    root.title('이름 입력') # 타이틀
+    root.geometry('230x60+190+350')
+                    
+    lbl = Label(root, text="이름(최대 5글자)")
+    lbl.grid(row=0, column=0)
+    txt = Entry(root)
+    txt.grid(row=0, column=1)
+    btn = Button(root, text="OK", width=15, command=okClick)
+    btn.grid(row=1, column=1)
+                    
+    root.mainloop()
+                    
+    # 한글 설정
+    os.putenv('NLS_LANG', '.UTF8')
+        
+    # 로컬에 등록
+    try: 
+        PyShootingRankingList = pickle.load(open("./PyShooting/PyShootingRanking.pic", "rb"))
+    except:
+         PyShootingRankingList = []
+    PyShootingRankingList.append(count)
+    pickle.dump(PyShootingRankingList, open("./PyShooting/PyShootingRanking.pic", "wb"))
+
+    pauseGame()
+
+
+def pauseGame(): # 게임 종료 후 0,1 선택하는 함수
     while True:
         event = pygame.event.wait()
         if event.type in [pygame.QUIT]:
@@ -79,7 +137,7 @@ def writeMessage(text, count):
             elif event.key == pygame.K_1:
                 pygame.mixer.music.play(-1)
                 runGame()
-
+                
 
 def crash(count):
     global gamePad
@@ -181,7 +239,8 @@ def runGame():
         #운석과 충돌
         if y < rockY + rockHeight:
             if(rockX > x and rockX < x + fighterWidth) or (rockX + rockWidth > x and rockX + rockWidth <  x + fighterWidth):
-                crash(shotCount)
+                crash(shotCount) # 게임 종료
+                ranking(shotCount)
 
         drawObject(fighter, x, y)
 
@@ -221,8 +280,9 @@ def runGame():
             rockY = 0
             rockPassed += 1
 
-        if rockPassed == 3:
-            gameOver(shotCount)
+        if rockPassed == 3: # 게임 종료
+            gameOver()
+            ranking(shotCount)
 
         writePassed(rockPassed)
 
