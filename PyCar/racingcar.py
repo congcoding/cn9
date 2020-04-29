@@ -172,7 +172,7 @@ def main_loop():
                     score = 0
                     pygame.mouse.set_visible(False)
                     sound_engine.play()
-                    sleep(5)
+                    sleep(3)
                     pygame.mixer.music.play(-1)
 
             if not crash:
@@ -219,6 +219,9 @@ def main_loop():
             #레이싱 카 충돌사고 체크
             for i in range(car_count):
                 if player.check_crash(cars[i]):
+                    crash = True
+                    pygame.mixer.music.stop()
+                    sound_crash.play()
                     # name 입력하는 부분
                     root = Tk()
 
@@ -280,10 +283,8 @@ def main_loop():
                     #cursor.close()
                     #connection.close()
                     
-                    crash = True
-                    pygame.mixer.music.stop()
-                    sound_crash.play()
-                    sleep(2)
+                    
+                    sleep(1)
                     pygame.mouse.set_visible(True)
                     break
 
