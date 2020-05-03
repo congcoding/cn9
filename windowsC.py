@@ -3,6 +3,7 @@ from PyQt5.QtCore import *
 from PyQt5.QtWidgets import *
 import sys
 import client
+import socket
  
 QApplication.setAttribute(Qt.AA_EnableHighDpiScaling, True)
  
@@ -31,8 +32,9 @@ class CWidget(QWidget):
         box = QHBoxLayout()
  
         label = QLabel('Server IP')
-        self.ip = QLineEdit()
-        self.ip.setInputMask('000.000.000.000;_')
+        self.ip = QLineEdit(socket.gethostbyname(socket.gethostname()))
+        #self.ip = QLineEdit()
+        #self.ip.setInputMask('000.000.000.000;_')
         box.addWidget(label)
         box.addWidget(self.ip)
  
