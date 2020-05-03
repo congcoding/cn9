@@ -38,12 +38,16 @@ def ranking_screen():
         PySpaceshipLocalRankingList = pickle.load(open("./PySpaceship/PySpaceshipRanking.pic", "rb"))
     except:
         PySpaceshipLocalRankingList = []
-    PySpaceshipLocalRankingList.sort(reverse=True)
+    PySpaceshipLocalRankingList.sort(key=itemgetter(1), reverse=True)
     length = len(PySpaceshipLocalRankingList)
     if length > 4:
         length = 4
     for i in range(0, length):
-        draw_text(str(PySpaceshipLocalRankingList[i]), default_font, screen, 120, 180 + (i * 30),  BLACK)
+        draw_text(str(PySpaceshipLocalRankingList[i][0]), default_font, screen, 90, 180 + (i * 30),  BLACK)
+        draw_text(str(PySpaceshipLocalRankingList[i][1]), default_font, screen, 140, 180 + (i * 30),  BLACK)
+    
+    
+    
     # DB에서 점수 정보 가져오기
     draw_text("우주에서 살아남기(Online)", default_font, screen, 360, 150,  BLACK)
     try :
