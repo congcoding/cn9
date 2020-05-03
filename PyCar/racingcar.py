@@ -247,10 +247,10 @@ def main_loop():
                         except:
                             PyCarRankingList = []
 
-                        secondList = []
-                        secondList.append(name)
-                        secondList.append(score)
-                        PyCarRankingList.append(secondList)
+                        tmpList = []
+                        tmpList.append(name)
+                        tmpList.append(score)
+                        PyCarRankingList.append(tmpList)
                         pickle.dump(PyCarRankingList, open("./PyCar/PyCarRanking.pic", "wb"))
 
                         root.destroy()
