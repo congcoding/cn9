@@ -141,7 +141,7 @@ class CWidget(QWidget):
     def closeEvent(self, e):
         self.s.stop()
  
-if __name__ == '__main__':
+def main_loop():
     app = QApplication(sys.argv)
     w = CWidget()
-    sys.exit(app.exec_())
+    app.exec_()
