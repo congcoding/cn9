@@ -271,12 +271,12 @@ def main_loop():
                     os.putenv('NLS_LANG', '.UTF8')
                     
                     # pickle을 이용해 파일에 score 저장
-                    try:
-                        PyCarRankingList = pickle.load(open("./PyCar/PyCarRanking.pic", "rb"))
-                    except:
-                        PyCarRankingList = []
-                    PyCarRankingList.append(score)
-                    pickle.dump(PyCarRankingList, open("./PyCar/PyCarRanking.pic", "wb"))
+                    #try:
+                    #    PyCarRankingList = pickle.load(open("./PyCar/PyCarRanking.pic", "rb"))
+                    #except:
+                    #    PyCarRankingList = []
+                    #PyCarRankingList.append(score)
+                    #pickle.dump(PyCarRankingList, open("./PyCar/PyCarRanking.pic", "wb"))
                     
                     sleep(1)
                     pygame.mouse.set_visible(True)

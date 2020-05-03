@@ -74,12 +74,12 @@ def ranking_screen():
     PyCarLocalRankingList.sort(key=itemgetter(1), reverse=True)
     if len(PyCarLocalRankingList) >= 4:
         for i in range(0, 4):
-            draw_text(str(PyCarLocalRankingList[i][0]), default_font, screen, 90, 480 + (i * 30),  BLACK)
-            draw_text(str(PyCarLocalRankingList[i][1]), default_font, screen, 140, 480 + (i * 30),  BLACK)
+            draw_text(str(PyCarLocalRankingList[i][0]), default_font, screen, 90, 330 + (i * 30),  BLACK)
+            draw_text(str(PyCarLocalRankingList[i][1]), default_font, screen, 140, 330 + (i * 30),  BLACK)
     else:
         for i in range(0, len(PyCarLocalRankingList)):
-            draw_text(str(PyCarLocalRankingList[i][0]), default_font, screen, 90, 480 + (i * 30),  BLACK)
-            draw_text(str(PyCarLocalRankingList[i][1]), default_font, screen, 140, 480 + (i * 30),  BLACK)
+            draw_text(str(PyCarLocalRankingList[i][0]), default_font, screen, 90, 330 + (i * 30),  BLACK)
+            draw_text(str(PyCarLocalRankingList[i][1]), default_font, screen, 140, 330 + (i * 30),  BLACK)
 
     # DB에서 점수 정보 가져오기
     draw_text("수룡이의 레이싱(Online)", default_font, screen, 360, 300,  BLACK)
