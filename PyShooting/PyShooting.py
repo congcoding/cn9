@@ -44,7 +44,7 @@ def writeScore(count):
     """
     
     font = pygame.font.Font('./PyShooting/NanumGothic.ttf', 20)
-    text = font.render('파괴한 운석:' + str(count) + '/' + '(현재 최고 기록)', True, (255, 255, 255))
+    text = font.render('파괴한 운석:' + str(count), True, (255, 255, 255))
     gamePad.blit(text, (10, 0))
 
 
