@@ -6,6 +6,7 @@ from PySpaceship import PySpaceShip
 from PyCar import racingcar
 from PyShooting import PyShooting
 import Ranking
+import windows
 
 import pygame
 from pygame.locals import *
@@ -49,6 +50,9 @@ def main_screen():
                 return 'main_screen'
             elif event.key == pygame.K_4:
                 Ranking.main_loop()
+                return 'main_screen'
+            elif event.key == pygame.K_5:
+                windows.main_loop()
                 return 'main_screen'
         if event.type == QUIT:
             return 'quit'
