@@ -204,6 +204,19 @@ def game_loop():    #실제 게임 엔진
                 except:
                     messagebox.showerror("경고", "인터넷에 연결되어 있지 않아 로컬에만 저장되었습니다.")
                 
+
+                # pickle을 이용해 파일에 score 저장
+                try:
+                    PySpaceshipRankingList = pickle.load(open("./PySpaceship/PySpaceshipRanking.pic", "rb"))
+                except:
+                    PySpaceshipRankingList = []
+
+                tempList = []
+                tempList.append(name)
+                tempList.append(score)
+                PySpaceshipRankingList.append(tempList)
+                pickle.dump(PySpaceshipRankingList, open("./PySpaceship/PySpaceshipRanking.pic", "wb"))
+
                 root.destroy()
 
             root.title('이름 입력') # 타이틀
@@ -217,14 +230,7 @@ def game_loop():    #실제 게임 엔진
             btn.grid(row=1, column=1)
             
             root.mainloop()
-
-            # pickle을 이용해 파일에 score 저장
-            try:
-                PySpaceshipRankingList = pickle.load(open("./PySpaceship/PySpaceshipRanking.pic", "rb"))
-            except:
-                PySpaceshipRankingList = []
-            PySpaceshipRankingList.append(score)
-            pickle.dump(PySpaceshipRankingList, open("./PySpaceship/PySpaceshipRanking.pic", "wb"))
+            
             return 'game_screen'        #game_screen으로 돌아감
         elif warp: #워프에 우주선이 닿으면 아이템 획득의 의미
             warp_count += 1  #워프의 개수를 증가시키고      
