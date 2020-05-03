@@ -78,21 +78,18 @@ def draw_main_menu(score):
     draw_y = WINDOW_HEIGHT / 2
     image_flag = pygame.image.load('./PyCar/flag.png')
     screen.blit(image_flag, [0, 0])
-    #image_intro = pygame.image.load('./PyCar/PyCar.png')
+
     image_intro = pygame.image.load('./PyCar/PyCar2.png')
     screen.blit(image_intro, [draw_x + 40, draw_y - 280])
     font_40 = pygame.font.SysFont("FixedSys", 40, True, False)
     font_30 = pygame.font.SysFont("FixedSys", 30, True, False)
-    #text_title = font_40.render("PyCar: Racing Car Game", True, BLACK)
-    #text_title = font_40.render("카레이서 수룡이의 레이싱 게임", True, BLACK)
-    #screen.blit(text_title, [draw_x, draw_y])
+
     draw_text('카레이서 수룡이의 레이싱!',
               pygame.font.Font('./PyCar/NanumGothic.ttf', 35), screen,
               draw_x+200, draw_y+10, BLACK)
     score_text = font_40.render("Score: " + str(score), True, WHITE)
     screen.blit(score_text, [draw_x, draw_y + 70])
-    #text_start = font_30.render("Press Space Key to Start!", True, RED)
-    #screen.blit(text_start, [draw_x, draw_y + 100])
+
     draw_text('수룡이가 레이싱에서 이길 수 있게 도와주세요~',
               pygame.font.Font('./PyCar/NanumGothic.ttf', 20), screen,
               draw_x+200, draw_y+60, BLACK)
@@ -244,6 +241,18 @@ def main_loop():
                         except:
                             messagebox.showerror("경고", "인터넷에 연결되어 있지 않아 로컬에만 저장되었습니다.")
 
+                        # 로컬에 등록
+                        try: 
+                            PyCarRankingList = pickle.load(open("./PyCar/PyCarRanking.pic", "rb"))
+                        except:
+                            PyCarRankingList = []
+
+                        secondList = []
+                        secondList.append(name)
+                        secondList.append(score)
+                        PyCarRankingList.append(secondList)
+                        pickle.dump(PyCarRankingList, open("./PyCar/PyCarRanking.pic", "wb"))
+
                         root.destroy()
 
                     root.title('이름 입력') # 타이틀
@@ -257,10 +266,6 @@ def main_loop():
                     btn.grid(row=1, column=1)
                     
                     root.mainloop()
-                    
-                    #f = open("test.txt", 'w')
-                    #f.write(str(score)+"\n")
-                    #f.close()
 
                     # 한글 설정
                     os.putenv('NLS_LANG', '.UTF8')
@@ -272,17 +277,6 @@ def main_loop():
                         PyCarRankingList = []
                     PyCarRankingList.append(score)
                     pickle.dump(PyCarRankingList, open("./PyCar/PyCarRanking.pic", "wb"))
-                    # DB 연결
-                    #connection = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
-                    #cursor = connection.cursor()
-                    # 쿼리 실행
-                    #cursor.execute("insert into pycar(score) values ('%d')" % (score))
-                    # commit
-                    #connection.commit()
-                    # close
-                    #cursor.close()
-                    #connection.close()
-                    
                     
                     sleep(1)
                     pygame.mouse.set_visible(True)
