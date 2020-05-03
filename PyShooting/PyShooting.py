@@ -99,6 +99,19 @@ def ranking(count): # 랭킹 등록 함수
         except:
             messagebox.showerror("경고", "인터넷에 연결되어 있지 않아 로컬에만 저장되었습니다.")
 
+         # 로컬에 등록
+        try: 
+            PyShootingRankingList = pickle.load(open("./PyShooting/PyShootingRanking.pic", "rb"))
+        except:
+             PyShootingRankingList = []
+
+        secondList = []
+        secondList.append(name)
+        secondList.append(count)
+        PyShootingRankingList.append(secondList)
+        pickle.dump(PyShootingRankingList, open("./PyShooting/PyShootingRanking.pic", "wb"))
+
+
         root.destroy()
 
     root.title('이름 입력') # 타이틀
@@ -115,14 +128,6 @@ def ranking(count): # 랭킹 등록 함수
                     
     # 한글 설정
     os.putenv('NLS_LANG', '.UTF8')
-        
-    # 로컬에 등록
-    try: 
-        PyShootingRankingList = pickle.load(open("./PyShooting/PyShootingRanking.pic", "rb"))
-    except:
-         PyShootingRankingList = []
-    PyShootingRankingList.append(count)
-    pickle.dump(PyShootingRankingList, open("./PyShooting/PyShootingRanking.pic", "wb"))
 
     pauseGame()
 
@@ -284,7 +289,7 @@ def runGame():
             rockPassed += 1
 
         if rockPassed == 3: # 게임 종료
-            gameOver()
+            gameOver(shotCount)
             ranking(shotCount)
 
         writePassed(rockPassed)

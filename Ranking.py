@@ -3,6 +3,7 @@ import math
 import random
 import pickle
 import cx_Oracle
+from operator import itemgetter
 
 import pygame
 from pygame.locals import *
@@ -106,13 +107,15 @@ def ranking_screen():
         PyShootingLocalRankingList = pickle.load(open("./PyShooting/PyShootingRanking.pic", "rb"))
     except:
          PyShootingLocalRankingList = []
-    PyShootingLocalRankingList.sort(reverse=True)
+    PyShootingLocalRankingList.sort(key=itemgetter(1), reverse=True)
     if len(PyShootingLocalRankingList) >= 4:
         for i in range(0, 4):
-            draw_text(str(PyShootingLocalRankingList[i]), default_font, screen, 120, 480 + (i * 30),  BLACK)
+            draw_text(str(PyShootingLocalRankingList[i][0]), default_font, screen, 90, 480 + (i * 30),  BLACK)
+            draw_text(str(PyShootingLocalRankingList[i][1]), default_font, screen, 140, 480 + (i * 30),  BLACK)
     else:
         for i in range(0, len(PyShootingLocalRankingList)):
-            draw_text(str(PyShootingLocalRankingList[i]), default_font, screen, 120, 480 + (i * 30),  BLACK)
+            draw_text(str(PyShootingLocalRankingList[i][0]), default_font, screen, 90, 480 + (i * 30),  BLACK)
+            draw_text(str(PyShootingLocalRankingList[i][1]), default_font, screen, 140, 480 + (i * 30),  BLACK)
             
     # DB에서 점수 정보 가져오기
     draw_text("학교를 지켜라(Online)", default_font, screen, 360, 450,  BLACK)
