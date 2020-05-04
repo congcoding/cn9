@@ -43,9 +43,9 @@ warp_sound = pygame.mixer.Sound('./PySpaceShip/warp.wav')
 pygame.mixer.music.load('./PySpaceShip/Inner_Sanctum.mp3')
 
 # Sprite : pygame에서 게임에서 빈번하게 발생하는 객체들을 쉽게 관리할 수 있게 상속받을 수 있는 class
-class Spaceship(pygame.sprite.Sprite):  # 우주선 객체
-    def __init__(self) :    # 초기화
-        super(Spaceship, self).__init__()    # 상속받은 sprite에 Spaceship을 넘겨줌
+class Spaceship(pygame.sprite.Sprite):      # 우주선 객체
+    def __init__(self) :                    # 초기화
+        super(Spaceship, self).__init__()   # 상속받은 sprite에 Spaceship을 넘겨줌
         self.image = pygame.image.load('./PySpaceShip/spaceship.png')
         self.rect = self.image.get_rect()
         self.centerx = self.rect.centerx
@@ -55,9 +55,11 @@ class Spaceship(pygame.sprite.Sprite):  # 우주선 객체
         self.rect.x = x - self.centerx
         self.rect.y = y - self.centery
 
-    def collide(self, sprites): #우주선이 다른 객체와 충돌했는지 판단하는 function을 sprite에서 가져옴
+    # 우주선이 다른 객체와 충돌했는지 판단하는 함수를 sprite에서 가져옴
+    def collide(self, sprites): 
         for sprite in sprites:
-            if pygame.sprite.collide_rect(self, sprite):
+            #if pygame.sprite.collide_rect(self, sprite):   # 직사각형 모양으로 충돌
+            if pygame.sprite.collide_mask(self, sprite):    # 실제 모양으로 충돌
                 return sprite
 
 class Rock(pygame.sprite.Sprite): #암석 객체
@@ -100,7 +102,7 @@ class Rock(pygame.sprite.Sprite): #암석 객체
             return True
 
 
-def random_rock(speed): #암석이 랜덤하게 나와야 함
+def random_rock(speed): # 암석을 랜덤하게 나오게 하는 함수
     random_direction = random.randint(1, 4)
                                                                                 #ROCK(xpos, ypos, hspeed, vspeed)
     if random_direction == 1: #위에서 아래로 나오는 경우
@@ -129,21 +131,21 @@ def draw_repeating_background(background_img): #배경 이미지 반복하는 �
                                              background_rect.width, #배경이미지 width
                                              background_rect.height)) #배경이미지 height
 
-def draw_text(text, font, surface, x, y, main_color):
+def draw_text(text, font, surface, x, y, main_color):   # 글자를 출력하는 함수
     text_obj = font.render(text, True, main_color)
     text_rect = text_obj.get_rect()
     text_rect.centerx = x
     text_rect.centery = y
-    surface.blit(text_obj, text_rect)   #36분 48초 : 텍스트가 어떤 font에 어떤 text를 이 surface에다가 blit해줘 그런데 그거에 대해서 우리가 메인 컬러로 렌더링한 값으로 넣어주는 함수
+    surface.blit(text_obj, text_rect)   #텍스트를 surface에 미리 지정한 폰트와 색상으로 blit해주는 함수
 
-def game_loop():    #실제 게임 엔진
+def game_loop():    # 실제 게임 엔진을 실행하는 함수
     global score
 
     pygame.mixer.music.play(-1) #게임 배경음악 무한반복
     pygame.mouse.set_visible(False) #마우스 포인터 안보이게 하는 것 (마우스 모양이 우주선으로 바뀌어 있으므로)
 
     spaceship = Spaceship()
-    spaceship.set_pos(*pygame.mouse.get_pos())   #*은 가변의미, 마우스의 현재 위치가 우주선의 현재 위치가 됨
+    spaceship.set_pos(*pygame.mouse.get_pos()) #*은 가변의미, 마우스의 현재 위치가 우주선의 현재 위치가 됨
     rocks = pygame.sprite.Group()   #암석을 sprite를 사용해 그룹으로 관리
     warps = pygame.sprite.Group()   #워프를 sprite를 사용해 그룹으로 관리
 
@@ -190,18 +192,19 @@ def game_loop():    #실제 게임 엔진
                 name = txt.get()
                 try:
                     # DB를 이용해 score 저장
-                    conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
-                    cursor = conn.cursor()
-                    if len(name)==0:
+                    conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy") # DB 연결
+                    cursor = conn.cursor()  # cursor 가져오기
+                    if len(name)==0:        # 이름을 입력하지 않았을 경우 익명으로 저장
                         messagebox.showinfo("완료", "이름 없이 저장되었습니다")
                         name = "익명"
                     else:
                         messagebox.showinfo("완료", "저장되었습니다")
-                    cursor.execute("insert into ranking(gamecode, name, score) values ('%d', '%s', '%d')" % (1, name[:5], score))
-                    conn.commit()
-                    cursor.close()
-                    conn.close()
+                    cursor.execute("insert into ranking(gamecode, name, score) values ('%d', '%s', '%d')" % (1, name[:5], score)) # 쿼리 실행
+                    conn.commit()   # commit
+                    cursor.close()  # cursor 닫기
+                    conn.close()    # 연결 close 하기
                 except:
+                    # DB에 연결 시도했는데 실패할 경우 경고 메시지를 띄우고 로컬에만 점수 저장하기
                     messagebox.showerror("경고", "인터넷에 연결되어 있지 않아 로컬에만 저장되었습니다.")
                 
 
@@ -264,7 +267,7 @@ def game_loop():    #실제 게임 엔진
                 return 'quit'   
     return 'game_screen' #end while -> screen으로 이동
 
-def game_screen():
+def game_screen():  # 화면에 표현해주는 함수
     global score
     pygame.mouse.set_visible(True)
     pygame.display.set_caption('우주에서 살아남기')
@@ -312,7 +315,7 @@ def game_screen():
 
     return 'game_screen'
 
-def main_loop(): #main_loop로 액션을 취해줌
+def main_loop(): # 'quit'액션이 생기기 전까지 계속 게임을 실행하는 함수
     action = 'game_screen'
     while action != 'quit':
         if action == 'game_screen':
