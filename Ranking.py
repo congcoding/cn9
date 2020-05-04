@@ -32,40 +32,37 @@ def ranking_screen():
     start_image = pygame.image.load('ranking.png')
     screen.blit(start_image, [0, 0])
 
-    ################ 우주에서 살아남기 랭킹 ################
     # 파일에서 점수 정보 가져오기
     draw_text("우주에서 살아남기(Local)", default_font, screen, 120, 150,  BLACK)
     try:
         PySpaceshipLocalRankingList = pickle.load(open("./PySpaceship/PySpaceshipRanking.pic", "rb"))
     except:
         PySpaceshipLocalRankingList = []
-    PySpaceshipLocalRankingList.sort(key=itemgetter(1), reverse=True)
+    PySpaceshipLocalRankingList.sort(reverse=True)
     length = len(PySpaceshipLocalRankingList)
     if length > 4:
         length = 4
     for i in range(0, length):
         draw_text(str(PySpaceshipLocalRankingList[i][0]), default_font, screen, 90, 180 + (i * 30),  BLACK)
         draw_text(str(PySpaceshipLocalRankingList[i][1]), default_font, screen, 140, 180 + (i * 30),  BLACK)
-    
     # DB에서 점수 정보 가져오기
     draw_text("우주에서 살아남기(Online)", default_font, screen, 360, 150,  BLACK)
     try :
-        conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy") # DB 연결
-        cursor = conn.cursor()  # cursor 가져오기
-        cursor.execute("select * from ranking where gamecode = 1 order by score desc") # 쿼리 실행
-        PySpaceshipOnlineRankingList = cursor.fetchall() # 조회 결과를 list에 저장
-        conn.commit()   # commit
-        cursor.close()  # cursor 닫기
-        conn.close()    # 연결 close 하기
+        conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
+        cursor = conn.cursor()
+        cursor.execute("select * from ranking where gamecode = 1 order by score desc")
+        PySpaceshipOnlineRankingList = cursor.fetchall()
+        conn.commit()
+        cursor.close()
+        conn.close()
     
         length = len(PySpaceshipOnlineRankingList)
-        if length > 4:  # 최대 4개의 ranking 점수만 가져오기 위해 랭킹 정보가 4개보다 많은 경우 length를 4로 설정
+        if length > 4:
             length = 4
-        for i in range(0, length):  # 상위 4개의 점수를 화면에 출력하기
+        for i in range(0, length):
             draw_text(str(PySpaceshipOnlineRankingList[i][1]), default_font, screen, 330, 180 + (i * 30),  BLACK)
             draw_text(str(PySpaceshipOnlineRankingList[i][2]), default_font, screen, 390, 180 + (i * 30),  BLACK)
     except :
-        # DB에 연결 시도했는데 실패할 경우 온라인 랭킹에 "인터넷에 연결할 수 없습니다"를 화면에 출력하기
         draw_text("인터넷에 연결할 수 없습니다.", default_font, screen, 360, 180,  BLACK)
 
     #<PyCar 점수>
