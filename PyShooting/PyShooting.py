@@ -10,73 +10,50 @@ from tkinter import *
 from tkinter import messagebox
 
 
+
 padWidth = 480
 padHeight = 600
 rockImage =['./PyShooting/newRock.png']
-"""
-            './PyShooting/rock01.png','./PyShooting/rock02.png','./PyShooting/rock03.png','./PyShooting/rock04.png','./PyShooting/rock05.png',\
-             './PyShooting/rock06.png','./PyShooting/rock07.png','./PyShooting/rock08.png','./PyShooting/rock09.png','./PyShooting/rock10.png',\
-             './PyShooting/rock11.png','./PyShooting/rock12.png','./PyShooting/rock13.png','./PyShooting/rock14.png','./PyShooting/rock15.png',\
-             './PyShooting/rock16.png','./PyShooting/rock17.png','./PyShooting/rock18.png','./PyShooting/rock19.png','./PyShooting/rock20.png',\
-             './PyShooting/rock21.png','./PyShooting/rock22.png','./PyShooting/rock23.png','./PyShooting/rock24.png','./PyShooting/rock25.png',\
-             './PyShooting/rock26.png','./PyShooting/rock27.png','./PyShooting/rock28.png','./PyShooting/rock29.png','./PyShooting/rock30.png']
-             """
 explosionSound = ['./PyShooting/explosion01.wav','./PyShooting/explosion02.wav','./PyShooting/explosion03.wav','./PyShooting/explosion04.wav']
 
 
 
     
-def writeScore(count):
-    global gamePad
-    # 최고 기록 출력
-    """
-    try:
-        conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
-        cursor = conn.cursor()
-        cursor.execute("select * from ranking where gamecode = 3 order by score desc")
-        PyShootingOnlineRankingList = cursor.fetchall()
-        conn.commit()
-        cursor.close()
-        conn.close()
-        top = str(PyShootingOnlineRankingList[0][2])
-    except:
-        top = '0'
-    """
-    
+def writeScore(): #파괴한 운석의 수 표시
+    global gamePad    
     font = pygame.font.Font('./PyShooting/NanumGothic.ttf', 20)
-    text = font.render('파괴한 운석:' + str(count), True, (255, 255, 255))
+    text = font.render('파괴한 운석:' + str(shotCount), True, (255, 255, 255))
     gamePad.blit(text, (10, 0))
 
 
-def writePassed(count):
+def writePassed(): #놓친 운석의 수 표시
     global gamePad
     font = pygame.font.Font('./PyShooting/NanumGothic.ttf', 20)
-    text = font.render('놓친 운석:' + str(count) + '/3', True, (255, 0, 0))
+    text = font.render('놓친 운석:' + str(rockPassed) + '/3', True, (255, 0, 0))
     gamePad.blit(text, (360, 0))
 
-def writeMenu():
+
+def writeMenu(): #상단에 메뉴 안내
     global gamePad
     font = pygame.font.Font('./PyShooting/NanumGothic.ttf', 15)
     text = font.render('메인으로 "0" 다시 시작하기 "1"', True, (100, 100, 100))
     gamePad.blit(text, (10, 25))
+     
 
-
-def writeMessage(text, count):
+def gameOver(): # 게임 종료
     global gamePad, gameOverSound
-
-    # 게임 끝 메시지 출력
     textfont = pygame.font.Font('./PyShooting/NanumGothic.ttf', 15)
-    text = textfont.render(text, True, (255, 0, 0))
+    text = textfont.render('게임 오버! 메인으로 "0" 다시 시작하기 "1"', True, (255, 0, 0))
     textpos = text.get_rect()
     textpos.center = (padWidth / 2, padHeight / 2)
     gamePad.blit(text, textpos)
     pygame.display.update()
     pygame.mixer.music.stop()
     gameOverSound.play()
-    sleep(1)
+    ranking()
 
 
-def ranking(count): # 랭킹 등록 함수
+def ranking(): # 랭킹 등록 함수
     # DB에 등록 (name 입력하는 부분)
     root = Tk()
     
@@ -92,7 +69,7 @@ def ranking(count): # 랭킹 등록 함수
                 name = "익명"
             else:
                 messagebox.showinfo("완료", "저장되었습니다")
-            cursor.execute("insert into ranking(gamecode, name, score) values ('%d', '%s', '%d')" % (3, name[:5], count))
+            cursor.execute("insert into ranking(gamecode, name, score) values ('%d', '%s', '%d')" % (3, name[:5], shotCount))
             conn.commit()
             cursor.close()
             conn.close()
@@ -107,7 +84,7 @@ def ranking(count): # 랭킹 등록 함수
 
         secondList = []
         secondList.append(name)
-        secondList.append(count)
+        secondList.append(shotCount)
         PyShootingRankingList.append(secondList)
         pickle.dump(PyShootingRankingList, open("./PyShooting/PyShootingRanking.pic", "wb"))
 
@@ -138,22 +115,14 @@ def pauseGame(): # 게임 종료 후 0,1 선택하는 함수
         if event.type in [pygame.QUIT]:
             pygame.quit()
             sys.exit()
-        if event.type in [pygame.KEYDOWN]: # 실행은 잘 되는데 쉘에 오류 뜸
+        if event.type in [pygame.KEYDOWN]:
             if event.key == pygame.K_0:
                 import Start
                 Start.main_loop()
             elif event.key == pygame.K_1:
                 pygame.mixer.music.play(-1)
                 runGame()
-                
 
-def crash(count):
-    global gamePad
-    writeMessage('전투기 파괴! 메인으로 "0" 다시 시작하기 "1"', count)
-
-def gameOver(count):
-    global gamePad
-    writeMessage('게임 오버! 메인으로 "0" 다시 시작하기 "1"', count)
 
 def drawObject(obj, x, y):
     global gamePad
@@ -177,7 +146,7 @@ def initGame():
 
 
 def runGame():
-    global gamePad, clock, background, fighter, missile, explosion, missileSound, gameOverSound
+    global gamePad, clock, background, fighter, missile, explosion, missileSound, gameOverSound, shotCount, rockPassed
 
     fighterSize = fighter.get_rect().size
     fighterWidth = fighterSize[0]
@@ -211,24 +180,24 @@ def runGame():
                 pygame.quit()
                 sys.exit()
 
-            if event.type in [pygame.KEYDOWN]:
+            if event.type in [pygame.KEYDOWN]: # 수룡이 이동
                 if event.key == pygame.K_LEFT:
                      fighterX -= 5
                 elif event.key == pygame.K_RIGHT:
                     fighterX += 5
 
-                elif event.key == pygame.K_SPACE:
+                elif event.key == pygame.K_SPACE: # 수정구 발사
                     missileSound.play()
                     missileX = x + fighterWidth/2 # 수정구 발사 위치 조정
                     missileY = y - fighterHeight
                     missileXY.append([missileX, missileY])
 
-                if event.key == pygame.K_0: # 실행은 잘 되는데 쉘에 오류 뜸
+                if event.key == pygame.K_0: # 0 누르면 메인으로
                     pygame.mixer.music.stop()
                     import Start
                     Start.main_loop()
 
-                elif event.key == pygame.K_1:
+                elif event.key == pygame.K_1: # 1 누르면 다시 시작
                     pygame.mixer.music.play(-1)
                     runGame()
 
@@ -238,17 +207,17 @@ def runGame():
 
         drawObject(background, 0, 0)
 
-        x += fighterX
+        x += fighterX # 수룡이가 화면 밖으로 나가지 않게
         if x < 0:
             x = 0
         elif x > padWidth - fighterWidth:
             x = padWidth - fighterWidth
 
-        #운석과 충돌
+        #운석과 충돌하면
         if y < rockY + rockHeight:
             if(rockX > x and rockX < x + fighterWidth) or (rockX + rockWidth > x and rockX + rockWidth <  x + fighterWidth):
-                crash(shotCount) # 게임 종료
-                ranking(shotCount)
+                gameOver() # 게임 종료
+
 
         drawObject(fighter, x, y)
 
@@ -274,7 +243,7 @@ def runGame():
                 drawObject(missile, bx - 20, by) # 수정구 발사 위치 조정
 
         writeMenu()
-        writeScore(shotCount)
+        writeScore()
 
 
         rockY += rockSpeed
@@ -288,15 +257,14 @@ def runGame():
             rockY = 0
             rockPassed += 1
 
-        if rockPassed == 3: # 게임 종료
-            gameOver(shotCount)
-            ranking(shotCount)
+        if rockPassed == 3: # 지나친 운석이 3개가 되면
+            gameOver() # 게임 종료
 
-        writePassed(rockPassed)
+        writePassed()
 
             
 
-        if isShot:
+        if isShot: # 돌이 수정구에 맞으면
             drawObject(explosion, rockX, rockY)
             destroySound.play()
             rock = pygame.image.load(random.choice(rockImage))
