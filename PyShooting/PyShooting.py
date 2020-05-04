@@ -88,7 +88,6 @@ def ranking(): # 랭킹 등록 함수
         PyShootingRankingList.append(secondList)
         pickle.dump(PyShootingRankingList, open("./PyShooting/PyShootingRanking.pic", "wb"))
 
-
         root.destroy()
 
     root.title('이름 입력') # 타이틀

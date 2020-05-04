@@ -106,24 +106,25 @@ def ranking_screen():
     except:
         draw_text("인터넷에 연결할 수 없습니다.", default_font, screen, 360, 330,  BLACK)
 
-    # 3번 게임
-    # 파일에서 점수 정보 가져오기
+
+    # 3번 게임 랭킹 ************************************************************
+    # 파일에서 로컬 점수 가져오기
     draw_text("학교를 지켜라(Local)", default_font, screen, 120, 450,  BLACK)
     try:
-        PyShootingLocalRankingList = pickle.load(open("./PyShooting/PyShootingRanking.pic", "rb"))
+        PyShootingLocalRankingList = pickle.load(open("./PyShooting/PyShootingRanking.pic", "rb")) # 피클 모듈을 통해 저장된 점수 불러와 리스트에 넣기
     except:
-         PyShootingLocalRankingList = []
-    PyShootingLocalRankingList.sort(key=itemgetter(1), reverse=True)
-    if len(PyShootingLocalRankingList) >= 4:
+         PyShootingLocalRankingList = [] # 기존에 저장된 점수가 없을 경우 빈 리스트 만들기
+    PyShootingLocalRankingList.sort(key=itemgetter(1), reverse=True) # 이름/점수로 구성된 2차원 리스트를 점수를 기준으로 내림차순으로 정렬
+    if len(PyShootingLocalRankingList) >= 4: # 가장 높은 점수 4개 까지만 출력
         for i in range(0, 4):
-            draw_text(str(PyShootingLocalRankingList[i][0]), default_font, screen, 90, 480 + (i * 30),  BLACK)
-            draw_text(str(PyShootingLocalRankingList[i][1]), default_font, screen, 140, 480 + (i * 30),  BLACK)
+            draw_text(str(PyShootingLocalRankingList[i][0]), default_font, screen, 90, 480 + (i * 30),  BLACK) # 이름 출력
+            draw_text(str(PyShootingLocalRankingList[i][1]), default_font, screen, 140, 480 + (i * 30),  BLACK) # 점수 출력
     else:
         for i in range(0, len(PyShootingLocalRankingList)):
             draw_text(str(PyShootingLocalRankingList[i][0]), default_font, screen, 90, 480 + (i * 30),  BLACK)
             draw_text(str(PyShootingLocalRankingList[i][1]), default_font, screen, 140, 480 + (i * 30),  BLACK)
             
-    # DB에서 점수 정보 가져오기
+    # DB에서 온라인 점수 가져오기
     draw_text("학교를 지켜라(Online)", default_font, screen, 360, 450,  BLACK)
     try:
         conn = cx_Oracle.connect("shy/shyshyshy@kh-final.c9kbkjh06ivh.ap-northeast-2.rds.amazonaws.com:1521/shy")
