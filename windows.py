@@ -145,3 +145,4 @@ def main_loop():
     app = QApplication(sys.argv)
     w = CWidget()
     app.exec_()
+main_loop()
