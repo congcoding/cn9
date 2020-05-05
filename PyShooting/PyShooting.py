@@ -13,7 +13,6 @@ from tkinter import messagebox
 
 padWidth = 480
 padHeight = 600
-rockImage =['./PyShooting/newRock.png']
 explosionSound = ['./PyShooting/explosion01.wav','./PyShooting/explosion02.wav','./PyShooting/explosion03.wav','./PyShooting/explosion04.wav']
 
 
@@ -158,7 +157,7 @@ def runGame():
     
     missileXY = []
 
-    rock = pygame.image.load(random.choice(rockImage))
+    rock = pygame.image.load('./PyShooting/newRock.png')
     rockSize = rock.get_rect().size
     rockWidth = rockSize[0]
     rockHeight = rockSize[1]
@@ -248,7 +247,7 @@ def runGame():
         rockY += rockSpeed
 
         if rockY > padHeight:
-            rock = pygame.image.load(random.choice(rockImage))
+            rock = pygame.image.load('./PyShooting/newRock.png')
             rockSize = rock.get_rect().size
             rockWidth = rockSize[0]
             rockHeight = rockSize[1]
@@ -266,7 +265,7 @@ def runGame():
         if isShot: # 돌이 수정구에 맞으면
             drawObject(explosion, rockX, rockY)
             destroySound.play()
-            rock = pygame.image.load(random.choice(rockImage))
+            rock = pygame.image.load('./PyShooting/newRock.png')
             rockSize = rock.get_rect().size
             rockWidth = rockSize[0]
             rockHeight = rockSize[1]
